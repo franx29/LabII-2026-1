@@ -2,21 +2,21 @@
   <section id="servicios" class="py-5 bg-white">
     <div class="container py-4">
       <div class="text-center mb-5">
-        <h6 class="text-uppercase fw-bold teal-text tracking-widest">Servicios</h6>
-        <h2 class="fw-bold teal-text mb-3">Todo lo que necesitas en un solo lugar</h2>
+        <h6 class="text-uppercase fw-bold text-primary tracking-widest">Servicios</h6>
+        <h2 class="fw-bold text-primary mb-3">Todo lo que necesitas en un solo lugar</h2>
         <p class="text-muted fs-5">Soluciones financieras diseñadas específicamente para la comunidad universitaria</p>
       </div>
       <div class="row justify-content-center g-4">
         <div class="col-md-6 col-lg-4" v-for="(srv, index) in servicios" :key="index">
-          <div class="card h-100 border-0 shadow-sm custom-card overflow-hidden position-relative">
+          <div class="card h-100 border-0 shadow-sm rounded-4 hover-card overflow-hidden position-relative">
             <div class="img-wrapper position-relative">
               <img :src="srv.image" class="card-img-top object-fit-cover" alt="servicio" style="height: 200px;">
-              <div class="icon-bubble bg-white text-teal shadow-sm d-flex align-items-center justify-content-center position-absolute">
+              <div class="position-absolute bg-white text-primary shadow-sm d-flex align-items-center justify-content-center rounded-circle" style="bottom: -20px; right: 25px; width: 45px; height: 45px; font-size: 1.2rem; z-index: 10;">
                 <i :class="srv.icon"></i>
               </div>
             </div>
             <div class="card-body p-4 p-md-5">
-              <h5 class="card-title fw-bold teal-text mb-3">{{ srv.title }}</h5>
+              <h5 class="card-title fw-bold text-primary mb-3">{{ srv.title }}</h5>
               <p class="card-text text-muted" style="font-size: 0.95rem;">{{ srv.description }}</p>
             </div>
           </div>
@@ -78,23 +78,16 @@ const servicios = ref([
 </script>
 
 <style scoped>
-.teal-text {
-  color: #1a6f67;
-}
-.text-teal {
-  color: #1a6f67;
-}
 .tracking-widest {
   letter-spacing: 0.1em;
 }
-.custom-card {
-  border-radius: 16px;
+.hover-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   background-color: #ffffff;
 }
-.custom-card:hover {
+.hover-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(26, 111, 103, 0.1) !important;
+  box-shadow: 0 10px 30px rgba(var(--bs-primary-rgb), 0.1) !important;
 }
 .img-wrapper::after {
   content: '';
@@ -103,16 +96,7 @@ const servicios = ref([
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(26, 111, 103, 0.2) 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(var(--bs-primary-rgb), 0.2) 100%);
   pointer-events: none;
-}
-.icon-bubble {
-  bottom: -20px;
-  right: 25px;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  z-index: 10;
 }
 </style>

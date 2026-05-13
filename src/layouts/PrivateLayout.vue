@@ -1,5 +1,5 @@
 <template>
-  <div class="private-layout">
+  <div class="min-vh-100">
     <slot />
   </div>
 </template>
@@ -9,7 +9,4 @@
 </script>
 
 <style scoped>
-.private-layout {
-  min-height: 100vh;
-}
 </style>
