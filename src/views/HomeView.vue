@@ -1,11 +1,14 @@
 <template>
   <main class="home-page">
     <HomeHeader />
+    <HomeHero />
   </main>
 </template>
 
 <script setup>
 import HomeHeader from '@/components/HomeHeader.vue'
+import HomeHero from '@/components/HomeHero.vue'
+import HomeBenefitsFlip from '@/components/HomeBenefitsFlip.vue'
 </script>
 
 <style scoped>
