@@ -78,13 +78,13 @@ function handleMouseEnter() {
 <style scoped>
 .flip-card {
   perspective: 1200px;
-  min-height: 235px;
+  min-height: 260px;
 }
 
 .flip-card-inner {
   position: relative;
   width: 100%;
-  min-height: 235px;
+  min-height: 260px;
   transform-style: preserve-3d;
   transition: transform 0.7s ease;
 }
@@ -99,7 +99,7 @@ function handleMouseEnter() {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 1.55rem;
+  padding: 1.8rem;
   border-radius: 24px;
   backface-visibility: hidden;
   overflow: hidden;
@@ -148,7 +148,7 @@ function handleMouseEnter() {
 
 .card-title {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   line-height: 1.35;
   font-weight: 600;
   color: #085f63;
@@ -160,10 +160,10 @@ function handleMouseEnter() {
 
 .card-text {
   margin: 0.95rem 0 0;
-  font-size: 0.98rem;
-  line-height: 1.65;
+  font-size: 0.92rem;
+  line-height: 1.6;
   color: rgba(255, 255, 255, 0.92);
-  max-width: 95%;
+  max-width: 100%;
 }
 
 .card-bottom {
@@ -193,31 +193,31 @@ function handleMouseEnter() {
 @media (max-width: 991.98px) {
   .flip-card,
   .flip-card-inner {
-    min-height: 220px;
+    min-height: 240px;
   }
 
   .flip-face {
-    padding: 1.3rem;
+    padding: 1.5rem;
     border-radius: 22px;
   }
 
   .card-title {
-    font-size: 1.08rem;
+    font-size: 1.05rem;
   }
 
   .card-text {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 }
 
 @media (max-width: 575.98px) {
   .flip-card,
   .flip-card-inner {
-    min-height: 205px;
+    min-height: 220px;
   }
 
   .flip-face {
-    padding: 1.1rem;
+    padding: 1.3rem;
     border-radius: 20px;
   }
 
@@ -233,8 +233,8 @@ function handleMouseEnter() {
   }
 
   .card-text {
-    font-size: 0.92rem;
-    line-height: 1.55;
+    font-size: 0.88rem;
+    line-height: 1.5;
   }
 
   .arrow-btn {

@@ -101,11 +101,9 @@
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 .hero-section {
   position: relative;
-  font-family: 'Plus Jakarta Sans', sans-serif;
   background: #ffffff;
   overflow: hidden;
 }
