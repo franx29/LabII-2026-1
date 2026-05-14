@@ -2,6 +2,7 @@
   <main class="home-page">
     <HomeHeader />
     <HomeHero />
+    <HomeBenefitsFlip />  
   </main>
 </template>
 
