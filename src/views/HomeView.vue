@@ -1,23 +1,29 @@
 <template>
-  <main class="home-page">
+  <PublicLayout>
     <HomeHeader />
     <HomeHero />
-    <HomeBenefitsFlip />  
-  </main>
+    <HomeBenefitsFlip />
+
+    <ObjetivosSection />
+    <ServiciosSection />
+    <ContactoSection />
+  </PublicLayout>
 </template>
 
 <script setup>
+import PublicLayout from '@/layouts/PublicLayout.vue'
+
 import HomeHeader from '@/components/HomeHeader.vue'
 import HomeHero from '@/components/HomeHero.vue'
 import HomeBenefitsFlip from '@/components/HomeBenefitsFlip.vue'
+
+import ObjetivosSection from '@/components/ObjetivosSection.vue'
+import ServiciosSection from '@/components/ServiciosSection.vue'
+import ContactoSection from '@/components/ContactoSection.vue'
 </script>
 
 <style scoped>
 html {
   scroll-behavior: smooth;
-}
-.home-page {
-  background: #f7f9f9;
-  min-height: 100vh;
 }
 </style>
