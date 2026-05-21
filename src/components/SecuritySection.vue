@@ -35,7 +35,7 @@
             </div>
             <h5 class="card-title fw-semibold">Autenticación multifactor</h5>
             <p class="card-text">
-              Verificación en múltiples pasos con biometría y códigos únicos.
+              Verificación en múltiples pasos con biometría y códigos únicos para garantizar que solo tú accedas. 
             </p>
           </div>
         </div>
@@ -47,7 +47,7 @@
             </div>
             <h5 class="card-title fw-semibold">Monitoreo 24/7</h5>
             <p class="card-text">
-              Vigilancia continua que detecta actividades sospechosas en tiempo real.
+              Sistema de vigilancia continua que detecta y previene actividades sospechosas en tiempo real.
             </p>
           </div>
         </div>
@@ -59,7 +59,7 @@
             </div>
             <h5 class="card-title fw-semibold">Infraestructura certificada</h5>
             <p class="card-text">
-              Cumplimos con estándares PCI DSS y certificaciones internacionales.
+              Cumplimos con estándares internacionales PCI DSS y certificaciones de seguridad financiera.
             </p>
           </div>
         </div>
