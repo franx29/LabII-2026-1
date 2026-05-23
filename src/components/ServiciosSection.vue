@@ -11,13 +11,13 @@
           <div class="card h-100 border-0 shadow-sm rounded-4 hover-card overflow-hidden position-relative">
             <div class="img-wrapper position-relative">
               <img :src="srv.image" class="card-img-top object-fit-cover" alt="servicio" style="height: 200px;">
-              <div class="position-absolute bg-white text-primary shadow-sm d-flex align-items-center justify-content-center rounded-circle" style="bottom: -20px; right: 25px; width: 45px; height: 45px; font-size: 1.2rem; z-index: 10;">
+              <div class="position-absolute bg-white text-primary shadow-sm d-flex align-items-center justify-content-center rounded-circle service-icon" style="bottom: -20px; right: 25px; z-index: 10;">
                 <i :class="srv.icon"></i>
               </div>
             </div>
             <div class="card-body p-4 p-md-5">
               <h5 class="card-title fw-bold text-primary mb-3">{{ srv.title }}</h5>
-              <p class="card-text text-muted" style="font-size: 0.95rem;">{{ srv.description }}</p>
+              <p class="card-text text-muted text-sm">{{ srv.description }}</p>
             </div>
           </div>
         </div>
@@ -98,5 +98,11 @@ const servicios = ref([
   height: 100%;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(var(--bs-primary-rgb), 0.2) 100%);
   pointer-events: none;
+}
+
+.service-icon {
+  width: 45px;
+  height: 45px;
+  font-size: var(--bs-h3-font-size);
 }
 </style>

@@ -85,8 +85,8 @@ import logoBanco from '@/assets/logo-no-background.png'
 
 .nav-link {
   color: #65727b;
-  font-size: 0.98rem;
-  font-weight: 500;
+  font-size: var(--bs-body-font-size);
+  font-weight: var(--bs-body-font-weight);
   margin: 0 0.45rem;
   transition: color 0.25s ease;
 }
@@ -101,7 +101,7 @@ import logoBanco from '@/assets/logo-no-background.png'
   border: none;
   border-radius: 14px;
   padding: 0.8rem 1.55rem;
-  font-weight: 600;
+  font-weight: 500;
   min-width: 108px;
   transition: all 0.25s ease;
 }
@@ -146,7 +146,7 @@ import logoBanco from '@/assets/logo-no-background.png'
   .nav-link {
     margin: 0;
     padding: 0.85rem 0;
-    font-size: 1rem;
+    font-size: var(--bs-body-font-size);
   }
 
   .btn-access {
@@ -177,7 +177,7 @@ import logoBanco from '@/assets/logo-no-background.png'
   }
 
   .nav-link {
-    font-size: 0.98rem;
+    font-size: var(--bs-body-font-size);
     padding: 0.8rem 0;
   }
 }
