@@ -133,8 +133,8 @@ function handleMouseEnter() {
   place-items: center;
   background: #edf7f7;
   color: #49beb7;
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: var(--bs-h3-font-size);
+  font-weight: var(--bs-headings-font-weight);
 }
 
 .flip-back .icon-box {
@@ -148,9 +148,9 @@ function handleMouseEnter() {
 
 .card-title {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: var(--bs-h3-font-size);
   line-height: 1.35;
-  font-weight: 600;
+  font-weight: var(--bs-headings-font-weight);
   color: #085f63;
 }
 
@@ -160,8 +160,8 @@ function handleMouseEnter() {
 
 .card-text {
   margin: 0.95rem 0 0;
-  font-size: 0.92rem;
-  line-height: 1.6;
+  font-size: var(--bs-body-font-size);
+  line-height: var(--bs-body-line-height);
   color: rgba(255, 255, 255, 0.92);
   max-width: 100%;
 }
@@ -181,8 +181,8 @@ function handleMouseEnter() {
   place-items: center;
   background: #edf7f7;
   color: #49beb7;
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-size: var(--bs-body-font-size);
+  font-weight: var(--bs-headings-font-weight);
   transition: transform 0.2s ease, background 0.2s ease;
 }
 
@@ -202,11 +202,11 @@ function handleMouseEnter() {
   }
 
   .card-title {
-    font-size: 1.05rem;
+    font-size: var(--bs-h4-font-size);
   }
 
   .card-text {
-    font-size: 0.9rem;
+    font-size: var(--bs-body-font-size);
   }
 }
 
@@ -225,22 +225,22 @@ function handleMouseEnter() {
     width: 44px;
     height: 44px;
     border-radius: 14px;
-    font-size: 1.1rem;
+    font-size: var(--bs-h4-font-size);
   }
 
   .card-title {
-    font-size: 1rem;
+    font-size: var(--bs-h4-font-size);
   }
 
   .card-text {
-    font-size: 0.88rem;
+    font-size: var(--bs-body-font-size);
     line-height: 1.5;
   }
 
   .arrow-btn {
     width: 32px;
     height: 32px;
-    font-size: 1rem;
+    font-size: var(--bs-body-font-size);
   }
 }
 </style>

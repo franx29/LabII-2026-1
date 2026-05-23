@@ -9,13 +9,13 @@
         <div class="col-md-6 col-lg-4" v-for="(obj, index) in objetivos" :key="index">
           <div class="card h-100 border-0 shadow-sm rounded-4 hover-card position-relative">
             <div class="card-body p-4 p-md-5">
-              <div class="mb-4 text-primary bg-primary bg-opacity-10 d-flex align-items-center justify-content-center rounded-3" style="width: 50px; height: 50px; font-size: 1.5rem;">
+              <div class="mb-4 text-primary bg-primary bg-opacity-10 d-flex align-items-center justify-content-center rounded-3 objective-icon">
                 <i :class="obj.icon"></i>
               </div>
               <h5 class="card-title fw-bold text-primary mb-3">{{ obj.title }}</h5>
-              <p class="card-text text-muted" style="font-size: 0.95rem;">{{ obj.description }}</p>
+              <p class="card-text text-muted text-sm">{{ obj.description }}</p>
             </div>
-            <div class="position-absolute top-0 end-0 translate-middle bg-primary text-white fw-bold d-flex align-items-center justify-content-center shadow-sm rounded-circle" style="width: 35px; height: 35px; font-size: 0.9rem; margin-top: 15px; margin-right: 15px;">
+            <div class="position-absolute top-0 end-0 translate-middle bg-primary text-white fw-bold d-flex align-items-center justify-content-center shadow-sm rounded-circle objective-badge">
               {{ index + 1 }}
             </div>
           </div>
@@ -68,5 +68,19 @@ const objetivos = ref([
 .hover-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 30px rgba(var(--bs-primary-rgb), 0.1) !important;
+}
+
+.objective-icon {
+  width: 50px;
+  height: 50px;
+  font-size: var(--bs-h3-font-size);
+}
+
+.objective-badge {
+  width: 35px;
+  height: 35px;
+  font-size: var(--bs-body-font-size);
+  margin-top: 15px;
+  margin-right: 15px;
 }
 </style>

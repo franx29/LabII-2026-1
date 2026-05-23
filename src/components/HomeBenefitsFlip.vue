@@ -70,18 +70,18 @@ import BenefitCardFlip from '@/components/BenefitCardFlip.vue'
   margin: 0 auto 3rem;
 }
 
-.section-eyebrow {
+  .section-eyebrow {
   margin: 0 0 0.75rem;
   color: #49beb7;
-  font-size: 0.86rem;
+  font-size: var(--text-xs, 0.75rem);
   font-weight: 500;
   letter-spacing: 0.12em;
 }
 
-.section-title {
+  .section-title {
   margin: 0;
   color: #085f63;
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.2;
   font-weight: 600;
 }
