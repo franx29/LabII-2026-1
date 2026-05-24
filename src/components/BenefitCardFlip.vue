@@ -148,7 +148,7 @@ function handleMouseEnter() {
 
 .card-title {
   margin: 0;
-  font-size: var(--bs-h3-font-size);
+  font-size: 16px;
   line-height: 1.35;
   font-weight: var(--bs-headings-font-weight);
   color: #085f63;
@@ -160,7 +160,7 @@ function handleMouseEnter() {
 
 .card-text {
   margin: 0.95rem 0 0;
-  font-size: var(--bs-body-font-size);
+  font-size: 14px;
   line-height: var(--bs-body-line-height);
   color: rgba(255, 255, 255, 0.92);
   max-width: 100%;

@@ -304,7 +304,7 @@
 
 .balance-amount {
   margin: 0 0 1.4rem;
-  font-size: 3rem;
+  font-size: 30px;
   line-height: 1.05;
   font-weight: 600;
   color: var(--bs-primary);
@@ -354,7 +354,7 @@
   color: var(--bs-primary);
   border-radius: 18px;
   padding: 0.95rem 1rem;
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 600;
   transition: all 0.25s ease;
 }

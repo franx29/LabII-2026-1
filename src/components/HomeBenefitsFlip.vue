@@ -81,7 +81,6 @@ import BenefitCardFlip from '@/components/BenefitCardFlip.vue'
   .section-title {
   margin: 0;
   color: #085f63;
-  font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.2;
   font-weight: 600;
 }
