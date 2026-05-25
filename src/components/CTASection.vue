@@ -16,7 +16,7 @@
 <style scoped>
 .cta-section {
   /* Degradado fluido de esquina a esquina */
-  background: linear-gradient(135deg, #0a423d 0%, #11685e 60%, #159385 100%);
+  background: linear-gradient(155deg, #085F63 0%, #085F63 60%, #47BBB4 100%);
 }
 
 .btn-cta {

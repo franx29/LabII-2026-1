@@ -112,7 +112,7 @@ const logoBanco = new URL('../assets/logo-no-background.png', import.meta.url).h
 }
 
 .footer a:hover {
-  color: #17abf5 !important;
+  color: #085F63 !important;
   padding-left: 4px;
 }
 
