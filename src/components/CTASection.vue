@@ -36,4 +36,9 @@
   transform: scale(1.05);             /* Se agranda un 5% */
   box-shadow: 0 0 20px 8px rgba(103, 115, 122, 0.8); /* Brillo blanco alrededor */
 }
+
+.cta-section h2,
+.cta-section p {
+  color: white;
+}
 </style>

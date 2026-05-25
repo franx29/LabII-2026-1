@@ -6,7 +6,11 @@
 
     <ObjetivosSection />
     <ServiciosSection />
+     <SecuritySection />
     <ContactoSection />
+
+    <CTASection />
+    <FooterSection />
   </PublicLayout>
 </template>
 
@@ -20,6 +24,10 @@ import HomeBenefitsFlip from '@/components/HomeBenefitsFlip.vue'
 import ObjetivosSection from '@/components/ObjetivosSection.vue'
 import ServiciosSection from '@/components/ServiciosSection.vue'
 import ContactoSection from '@/components/ContactoSection.vue'
+
+import SecuritySection from '@/components/SecuritySection.vue'
+import CTASection from '@/components/CTASection.vue'  
+import FooterSection from '@/components/FooterSection.vue'
 </script>
 
 <style scoped>
