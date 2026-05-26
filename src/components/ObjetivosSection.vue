@@ -7,7 +7,7 @@
       </div>
       <div class="row justify-content-center g-4">
         <div class="col-md-6 col-lg-4" v-for="(obj, index) in objetivos" :key="index">
-          <div class="card h-100 border-0 shadow-sm rounded-4 hover-card position-relative">
+          <div class="card h-100 border-0 rounded-4 hover-card position-relative">
             <div class="card-body p-4 p-md-5">
               <div class="mb-4 text-primary bg-primary bg-opacity-10 d-flex align-items-center justify-content-center rounded-3 objective-icon">
                 <i :class="obj.icon"></i>
@@ -47,7 +47,7 @@ const objetivos = ref([
   {
     title: 'Alianzas estratégicas',
     description: 'Establecer alianzas estratégicas con universidades y empresas para ofrecer beneficios exclusivos a nuestros clientes, tales como descuentos en matrículas, becas, prácticas laborales, entre otros.',
-    icon: 'bi bi-handshake'
+    icon: 'bi bi-people'
   },
   {
     title: 'Innovación continua',
@@ -64,10 +64,11 @@ const objetivos = ref([
 .hover-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   background-color: #ffffff;
+  box-shadow: var(--bs-box-shadow-sm);
 }
 .hover-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(var(--bs-primary-rgb), 0.1) !important;
+  box-shadow: 0 10px 30px rgba(var(--bs-primary-rgb), 0.1);
 }
 
 .objective-icon {

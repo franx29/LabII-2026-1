@@ -9,7 +9,7 @@
 
       <div class="row justify-content-center g-4 mb-5">
         <div class="col-md-6 col-lg-3" v-for="(contact, index) in contactos" :key="index">
-          <div class="card h-100 border rounded-4 hover-card p-2">
+          <div class="card h-100 rounded-4 hover-card p-2">
             <div class="card-body text-start p-4">
               <div class="mb-4 d-flex align-items-center justify-content-center rounded-3" style="width: 48px; height: 48px; font-size: 1.25rem; background-color: rgba(73, 190, 183, 0.15); color: #085f63;">
                 <i :class="contact.icon"></i>
@@ -27,7 +27,7 @@
 
       <div class="row justify-content-center g-3">
         <div class="col-md-4 col-lg-3" v-for="(red, index) in redesSociales" :key="index">
-          <div class="card border rounded-4 hover-card p-3">
+          <div class="card rounded-4 hover-card p-3">
             <div class="d-flex align-items-center">
               <div class="d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 40px; height: 40px; font-size: 1.2rem; background-color: rgba(73, 190, 183, 0.15); color: #085f63;">
                 <i :class="red.icon"></i>
@@ -98,11 +98,11 @@ const redesSociales = ref([
 .hover-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   background-color: #ffffff;
-  border-color: #e2e8f0 !important; 
+  border: 1px solid #e2e8f0;
 }
 
 .hover-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(8, 95, 99, 0.08) !important; 
+  box-shadow: 0 10px 30px rgba(8, 95, 99, 0.08); 
 }
 </style>
