@@ -8,7 +8,7 @@
       </div>
       <div class="row justify-content-center g-4">
         <div class="col-md-6 col-lg-4" v-for="(srv, index) in servicios" :key="index">
-          <div class="card h-100 border-0 shadow-sm rounded-4 hover-card overflow-hidden position-relative">
+          <div class="card h-100 border-0 rounded-4 hover-card overflow-hidden position-relative">
             <div class="img-wrapper position-relative">
               <img :src="srv.image" class="card-img-top object-fit-cover" alt="servicio" style="height: 200px;">
               <div class="position-absolute bg-white text-primary shadow-sm d-flex align-items-center justify-content-center rounded-circle service-icon" style="bottom: -20px; right: 25px; z-index: 10;">
@@ -84,10 +84,11 @@ const servicios = ref([
 .hover-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   background-color: #ffffff;
+  box-shadow: var(--bs-box-shadow-sm);
 }
 .hover-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(var(--bs-primary-rgb), 0.1) !important;
+  box-shadow: 0 10px 30px rgba(var(--bs-primary-rgb), 0.1);
 }
 .img-wrapper::after {
   content: '';

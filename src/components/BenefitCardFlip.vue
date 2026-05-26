@@ -6,7 +6,6 @@
     @click="toggleCard"
   >
     <div class="flip-card-inner">
-      <!-- FRONT -->
       <div class="flip-face flip-front">
         <div class="card-top">
           <div class="icon-box">
@@ -25,7 +24,6 @@
         </div>
       </div>
 
-      <!-- BACK -->
       <div class="flip-face flip-back">
         <div class="card-top">
           <div class="icon-box">

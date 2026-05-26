@@ -28,10 +28,4 @@ import ContactoSection from '@/components/ContactoSection.vue'
 import SecuritySection from '@/components/SecuritySection.vue'
 import CTASection from '@/components/CTASection.vue'  
 import FooterSection from '@/components/FooterSection.vue'
-</script>
-
-<style scoped>
-html {
-  scroll-behavior: smooth;
-}
-</style>
+</script>

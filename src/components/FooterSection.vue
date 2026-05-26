@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// Ruta del logo (ajusta si es necesario)
 const logoBanco = new URL('../assets/logo-no-background.png', import.meta.url).href;
 </script>
 
@@ -7,7 +6,6 @@ const logoBanco = new URL('../assets/logo-no-background.png', import.meta.url).h
   <footer class="footer py-5">
     <div class="container">
       <div class="row">
-        <!-- COLUMNA DEL LOGO + DESCRIPCIÓN -->
         <div class="col-lg-3 col-md-6 mb-4 text-center text-lg-start">
           <div class="d-flex align-items-center justify-content-center justify-content-lg-start gap-2 mb-3">
             <img :src="logoBanco" alt="Banco Universitario" class="footer-logo" />
@@ -17,20 +15,18 @@ const logoBanco = new URL('../assets/logo-no-background.png', import.meta.url).h
           </p>
         </div>
 
-        <!-- NAVEGACIÓN -->
         <div class="col-lg-3 col-md-6 mb-4">
           <h5>NAVEGACIÓN</h5>
           <ul class="list-unstyled">
-            <li><a href="#" class="text-muted text-decoration-none">Inicio</a></li>
-            <li><a href="#" class="text-muted text-decoration-none">Beneficios</a></li>
-            <li><a href="#" class="text-muted text-decoration-none">Nosotros</a></li>
-            <li><a href="#" class="text-muted text-decoration-none">Servicios</a></li>
-            <li><a href="#" class="text-muted text-decoration-none">Seguridad</a></li>
-            <li><a href="#" class="text-muted text-decoration-none">Contacto</a></li>
+            <li><a href="#inicio" class="text-muted text-decoration-none">Inicio</a></li>
+            <li><a href="#beneficios" class="text-muted text-decoration-none">Beneficios</a></li>
+            <li><a href="#nosotros" class="text-muted text-decoration-none">Nosotros</a></li>
+            <li><a href="#servicios" class="text-muted text-decoration-none">Servicios</a></li>
+            <li><a href="#seguridad" class="text-muted text-decoration-none">Seguridad</a></li>
+            <li><a href="#contacto" class="text-muted text-decoration-none">Contacto</a></li>
           </ul>
         </div>
 
-        <!-- LEGAL -->
         <div class="col-lg-3 col-md-6 mb-4">
           <h5>LEGAL</h5>
           <ul class="list-unstyled">
@@ -40,7 +36,6 @@ const logoBanco = new URL('../assets/logo-no-background.png', import.meta.url).h
           </ul>
         </div>
 
-        <!-- CONTACTO -->
         <div class="col-lg-3 col-md-6 mb-4">
           <h5>CONTACTO</h5>
           <ul class="list-unstyled">
@@ -69,22 +64,20 @@ const logoBanco = new URL('../assets/logo-no-background.png', import.meta.url).h
   align-items: flex-start;
 }
 
-/* TÍTULOS */
 .footer h5 {
-  color: #11425a;
+  color: #085f63;
   font-weight: 700;
   margin-bottom: 1.3rem;
   font-size: 1rem;
 }
 
-/* LOGO */
+
 .footer-logo {
-  height: 30px;      /* Ajusta este valor según el tamaño deseado */
+  height: 30px;
   width: auto;
   display: block;
 }
 
-/* DESCRIPCIÓN */
 .footer-description {
   font-size: 0.9rem;
   line-height: 1.5;
@@ -93,7 +86,6 @@ const logoBanco = new URL('../assets/logo-no-background.png', import.meta.url).h
   margin-right: auto;
 }
 
-/* En pantallas grandes la descripción se alinea a la izquierda sin centrar */
 @media (min-width: 992px) {
   .footer-description {
     margin-left: 0;
@@ -102,7 +94,6 @@ const logoBanco = new URL('../assets/logo-no-background.png', import.meta.url).h
   }
 }
 
-/* LINKS */
 .footer ul li {
   margin-bottom: 12px;
 }
@@ -116,14 +107,12 @@ const logoBanco = new URL('../assets/logo-no-background.png', import.meta.url).h
   padding-left: 4px;
 }
 
-/* TEXTO GENERAL */
 .footer p,
 .footer a {
   font-size: 0.95rem;
   line-height: 1.8;
 }
 
-/* LÍNEA SEPARADORA */
 hr {
   opacity: 0.1;
 }
