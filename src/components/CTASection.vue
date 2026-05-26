@@ -15,7 +15,7 @@
 
 <style scoped>
 .cta-section {
-  /* Degradado fluido de esquina a esquina */
+
   background: linear-gradient(155deg, #085F63 0%, #085F63 60%, #47BBB4 100%);
 }
 
@@ -27,14 +27,14 @@
   font-size: 1.1rem;
   transition: all 0.2s ease-in-out;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  cursor: pointer;     /* Asegura el cursor de mano */
-  will-change: transform, box-shadow; /* Optimiza la animación */
+  cursor: pointer;
+  will-change: transform, box-shadow;
 }
 
 .btn-cta:hover {
-  background-color: #ffffff;          /* Mantiene fondo blanco limpio */
-  transform: scale(1.05);             /* Se agranda un 5% */
-  box-shadow: 0 0 20px 8px rgba(103, 115, 122, 0.8); /* Brillo blanco alrededor */
+  background-color: #ffffff;
+  transform: scale(1.05);
+  box-shadow: 0 0 20px 8px rgba(103, 115, 122, 0.8);
 }
 
 .cta-section h2,
