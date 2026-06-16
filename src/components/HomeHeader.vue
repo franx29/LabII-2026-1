@@ -2,7 +2,8 @@
   <header class="home-header sticky-top">
     <nav class="navbar navbar-expand-lg home-navbar">
       <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="#">
+        <!-- Corregido: Se cambia el '#' vacío por una redirección limpia al inicio -->
+        <a class="navbar-brand d-flex align-items-center" href="#" @click.prevent="limpiarRutaASeccion('#inicio')">
           <img
             :src="logoBanco"
             alt="Banco Universitario"
@@ -24,28 +25,30 @@
 
         <div class="collapse navbar-collapse" id="mainNavbar">
           <ul class="navbar-nav mx-auto mb-3 mb-lg-0">
+            <!-- Corregido: Comillas cerradas y migrado a directivas de eventos de Vue (@click.prevent) -->
             <li class="nav-item">
-              <a class="nav-link" href="#inicio">Inicio</a>
+              <a class="nav-link" href="#inicio" @click.prevent="limpiarRutaASeccion('#inicio')">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#beneficios">Beneficios</a>
+              <a class="nav-link" href="#beneficios" @click.prevent="limpiarRutaASeccion('#beneficios')">Beneficios</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#nosotros">Nosotros</a>
+              <a class="nav-link" href="#nosotros" @click.prevent="limpiarRutaASeccion('#nosotros')">Nosotros</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#servicios">Servicios</a>
+              <a class="nav-link" href="#servicios" @click.prevent="limpiarRutaASeccion('#servicios')">Servicios</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#seguridad">Seguridad</a>
+              <a class="nav-link" href="#seguridad" @click.prevent="limpiarRutaASeccion('#seguridad')">Seguridad</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#contacto">Contacto</a>
+              <a class="nav-link" href="#contacto" @click.prevent="limpiarRutaASeccion('#contacto')">Contacto</a>
             </li>
           </ul>
 
           <div class="d-flex justify-content-lg-end">
-            <a href="#" class="btn btn-access">Acceder</a>
+            <!-- Corregido: Usar router-link o manejar la navegación de login si usas vue-router -->
+            <router-link to="/login" class="btn btn-access">Acceder</router-link>
           </div>
         </div>
       </div>
@@ -55,6 +58,27 @@
 
 <script setup>
 import logoBanco from '@/assets/logo-no-background.png'
+import { useRouter, useRoute } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
+
+// Función controladora interna de Vue que limpia la URL eliminando el /login anterior
+const limpiarRutaASeccion = (destino) => {
+  // Si el usuario está en la página de login, primero lo mandamos a la raíz '/' con el hash
+  if (route.path !== '/') {
+    router.push({ path: '/', hash: destino })
+  } else {
+    // Si ya está en la página principal, solo actualizamos el hash limpiamente en la URL
+    router.push({ hash: destino })
+    
+    // Hacemos el desplazamiento suave (scroll) de forma manual
+    const seccion = document.querySelector(destino)
+    if (seccion) {
+      seccion.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+}
 </script>
 
 <style scoped>
