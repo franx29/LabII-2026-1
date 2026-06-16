@@ -1,15 +1,28 @@
-<template>
+<script setup>
+import { ref } from 'vue'
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Acceso - Ejercicio UI Flexbox</title>
-    <!-- Importación de la fuente Montserrat desde Google Fonts -->
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-  </head>
+// Asegúrate de que coincida letra por letra (respetando la P mayúscula)
+const mostrarPassword = ref(false)
+
+// Variables reactivas
+const correo = ref('')
+const errorCorreo = ref('')
+
+// Función que valida el formato al perder el foco (blur)
+const validarCorreo = () => {
+  const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+  if (!correo.value.trim()) {
+    errorCorreo.value = 'El correo electrónico es obligatorio.'
+  } else if (!regexCorreo.test(correo.value)) {
+    errorCorreo.value = 'Por favor, ingresa un formato de correo válido (ejemplo@dominio.com).'
+  } else {
+    errorCorreo.value = '' 
+  }
+}
+</script>
+
+<template>
 
   <body>
     <!-- Contenedor Principal (Flexbox Vertical) -->
@@ -17,8 +30,8 @@
         
         <!-- Encabezado de la simulación -->
         <header class="login-header">
-            <h1>Portal de Acceso</h1>
-            <p class="subtitle">Servicios en Línea</p>
+            <h1>Banco Universitario</h1>
+            <p class="subtitle">Banca en Línea</p>
         </header>
 
         <!-- Tarjeta del Formulario (Flexbox Vertical) -->
@@ -28,23 +41,42 @@
             <!-- Formulario (Flexbox Vertical) -->
             <form class="login-form" onsubmit="return false;">
                 
-                <!-- Campo de Identificador (Flexbox Vertical) -->
-                <div class="input-group">
-                    <label for="username">Identificador de Usuario</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">👤</span>
-                        <input type="text" id="username" placeholder="Ingresa tu identificador">
-                    </div>
-                </div>
+                <!-- Campo de E-mail (Flexbox Vertical) -->
+               <div class="input-group">
+                  <label for="username">Correo Electrónico</label>
+                  <div class="input-wrapper" :class="{ 'input-error-border': errorCorreo }">
+                    <span class="input-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </span>
+    
+                    <input 
+                      v-model="correo"
+                      type="text" 
+                      id="username" 
+                      placeholder="Ingresa tu Correo Electrónico"
+                      @blur="validarCorreo"
+                    >
+                  </div>
+  
+                <!-- Contenedor del mensaje de error (Solo se muestra si errorCorreo tiene texto) -->
+                  <span v-if="errorCorreo" class="error-message">{{ errorCorreo }}</span>
+               </div>
 
                 <!-- Campo de Clave de Acceso (Flexbox Vertical) -->
                 <div class="input-group">
-                    <label for="password">Clave de Acceso</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">🔒</span>
-                        <input type="password" id="password" placeholder="Ingresa tu clave">
-                        <span class="toggle-password">👁️</span>
-                    </div>
+                 <label for="password">Clave de Acceso</label>
+                 <div class="input-wrapper">
+                   <span class="input-icon">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lock absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                   </span>
+
+                   <input :type="mostrarPassword ? 'text' : 'password'" id="password" placeholder="Ingresa tu clave">
+       
+                    <span class="toggle-password" @click="mostrarPassword = !mostrarPassword">
+                    <svg v-if="mostrarPassword" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-off w-5 h-5"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.574 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"></path><path d="M14.084 8.637a3 3 0 0 1 3.277 3.277"></path><path d="M6.177 6.177A10.745 10.745 0 0 0 2.062 11.652a1 1 0 0 0 0 .696 10.746 10.746 0 0 0 12.065 6.561"></path><circle cx="12" cy="12" r="3"></circle><line x1="2" x2="22" y1="2" y2="22"></line></svg>
+                      <svg v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye w-5 h-5"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </span>
+                 </div>
                 </div>
 
                 <!-- Botón de Envío Simulado -->
@@ -53,9 +85,11 @@
 
             <!-- Enlaces Inferiores (Flexbox Vertical) -->
             <div class="login-footer-links">
+                <p> Ejemplo: Correo: 123@aol.com | Clave:123456 </p>
+                <hr class="divider">
                 <p>¿No posees una cuenta? <a href="#">Regístrate aquí</a></p>
                 <hr class="divider">
-                <p>¿Requieres asistencia? <a href="#">Recuperar credenciales</a></p>
+                <p>¿Requieres asistencia? <a href="#">Recuperar</a></p>
             </div>
         </div>
 
@@ -65,12 +99,17 @@
   </body>
 </template>
    <style scoped>
- /* Estilos Generales y Reset */
+/* Estilos Generales y Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif !important; /* Fuerza la fuente en todos los elementos contenedores */
+}
+
+/* Asegura que los campos de formulario hereden correctamente la tipografía */
+input, button, label, select, textarea {
+    font-family: 'Montserrat', sans-serif !important;
 }
 
 /* El cuerpo usa Flexbox para centrar todo en la pantalla */
@@ -87,7 +126,7 @@ body {
 .login-container {
     display: flex;
     flex-direction: column;
-    align-items: center;     /* Alinea los hijos al centro horizontalmente */
+    align-items: center;     
     width: 100%;
     max-width: 440px;
     padding: 20px;
@@ -132,6 +171,24 @@ body {
     color: #111827;
     margin-bottom: 28px;
     font-weight: 600;
+}
+
+/* Mensaje de error abajo del input */
+.error-message {
+    color: #dc2626; /* Color rojo de advertencia */
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 6px;
+    text-align: left;
+}
+
+/* Clase dinámica para pintar el borde de rojo si la validación falla */
+.input-error-border input {
+    border-color: #dc2626 !important;
+}
+
+.input-error-border input:focus {
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.08) !important;
 }
 
 /* Formulario (Flexbox en columna) */
@@ -251,4 +308,5 @@ body {
 .back-link:hover {
     color: #374151;
 }
+
 </style> 
