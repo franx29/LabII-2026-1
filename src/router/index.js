@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 // Rutas públicas (web institucional)
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
+import RegisterView from '@/views/RegisterView.vue'
 
 // Rutas privadas (banca en línea)
 import DashboardView from '@/views/DashboardView.vue'
@@ -19,6 +20,12 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginView,
+    meta: { layout: 'public' },
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterView,
     meta: { layout: 'public' },
   },
   {
