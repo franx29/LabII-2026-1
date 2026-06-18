@@ -27,17 +27,19 @@
 
       <div class="row justify-content-center g-3">
         <div class="col-md-4 col-lg-3" v-for="(red, index) in redesSociales" :key="index">
-          <div class="card rounded-4 hover-card p-3">
-            <div class="d-flex align-items-center">
-              <div class="d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 40px; height: 40px; font-size: 1.2rem; background-color: rgba(73, 190, 183, 0.15); color: #085f63;">
-                <i :class="red.icon"></i>
-              </div>
-              <div class="text-start">
-                <h6 class="fw-bold text-uppercase mb-0" style="font-size: 0.75rem; letter-spacing: 0.05em; color: #085f63;">{{ red.name }}</h6>
-                <p class="text-muted mb-0" style="font-size: 0.8rem;">{{ red.handle }}</p>
+          <a :href="red.url" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-reset d-block">
+            <div class="card rounded-4 hover-card p-3">
+              <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 40px; height: 40px; font-size: 1.2rem; background-color: rgba(73, 190, 183, 0.15); color: #085f63;">
+                  <i :class="red.icon"></i>
+                </div>
+                <div class="text-start">
+                  <h6 class="fw-bold text-uppercase mb-0" style="font-size: 0.75rem; letter-spacing: 0.05em; color: #085f63;">{{ red.name }}</h6>
+                  <p class="text-muted mb-0" style="font-size: 0.8rem;">{{ red.handle }}</p>
+                </div>
               </div>
             </div>
-          </div>
+          </a>
         </div>
       </div>
 
@@ -75,16 +77,19 @@ const redesSociales = ref([
   {
     name: 'FACEBOOK',
     handle: '@bancouniversitariove',
+    url: 'https://www.facebook.com/bancouniversitariove',
     icon: 'bi bi-facebook'
   },
   {
     name: 'INSTAGRAM',
     handle: '@bancouniversitariove',
+    url: 'https://www.instagram.com/bancouniversitariove',
     icon: 'bi bi-instagram'
   },
   {
     name: 'TWITTER',
     handle: '@bancouniversitariove',
+    url: 'https://www.twitter.com/bancouniversitariove',
     icon: 'bi bi-twitter'
   }
 ])
