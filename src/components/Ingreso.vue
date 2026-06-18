@@ -1,312 +1,442 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import logoBanco from '@/assets/logo-no-background.png'
 
-// Asegúrate de que coincida letra por letra (respetando la P mayúscula)
+const router = useRouter()
+
 const mostrarPassword = ref(false)
-
-// Variables reactivas
-const correo = ref('')
-const errorCorreo = ref('')
-
-// Función que valida el formato al perder el foco (blur)
 const validarCorreo = () => {
   const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
   if (!correo.value.trim()) {
     errorCorreo.value = 'El correo electrónico es obligatorio.'
   } else if (!regexCorreo.test(correo.value)) {
-    errorCorreo.value = 'Por favor, ingresa un formato de correo válido (ejemplo@dominio.com).'
+    errorCorreo.value = 'Ingresa un formato de correo electrónico válido (ejemplo@dominio.com).'
   } else {
-    errorCorreo.value = '' 
+    errorCorreo.value = ''
   }
 }
 </script>
 
 <template>
+  <div class="auth-page-wrapper">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
 
-  <body>
-    <!-- Contenedor Principal (Flexbox Vertical) -->
     <div class="login-container">
-        
-        <!-- Encabezado de la simulación -->
-        <header class="login-header">
-            <h1>Banco Universitario</h1>
-            <p class="subtitle">Banca en Línea</p>
-        </header>
-
-        <!-- Tarjeta del Formulario (Flexbox Vertical) -->
-        <div class="login-card">
-            <h2>Iniciar Sesión</h2>
-            
-            <!-- Formulario (Flexbox Vertical) -->
-            <form class="login-form" onsubmit="return false;">
-                
-                <!-- Campo de E-mail (Flexbox Vertical) -->
-               <div class="input-group">
-                  <label for="username">Correo Electrónico</label>
-                  <div class="input-wrapper" :class="{ 'input-error-border': errorCorreo }">
-                    <span class="input-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    </span>
-    
-                    <input 
-                      v-model="correo"
-                      type="text" 
-                      id="username" 
-                      placeholder="Ingresa tu Correo Electrónico"
-                      @blur="validarCorreo"
-                    >
-                  </div>
-  
-                <!-- Contenedor del mensaje de error (Solo se muestra si errorCorreo tiene texto) -->
-                  <span v-if="errorCorreo" class="error-message">{{ errorCorreo }}</span>
-               </div>
-
-                <!-- Campo de Clave de Acceso (Flexbox Vertical) -->
-                <div class="input-group">
-                 <label for="password">Clave de Acceso</label>
-                 <div class="input-wrapper">
-                   <span class="input-icon">
-                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lock absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                   </span>
-
-                   <input :type="mostrarPassword ? 'text' : 'password'" id="password" placeholder="Ingresa tu clave">
-       
-                    <span class="toggle-password" @click="mostrarPassword = !mostrarPassword">
-                    <svg v-if="mostrarPassword" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-off w-5 h-5"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.574 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"></path><path d="M14.084 8.637a3 3 0 0 1 3.277 3.277"></path><path d="M6.177 6.177A10.745 10.745 0 0 0 2.062 11.652a1 1 0 0 0 0 .696 10.746 10.746 0 0 0 12.065 6.561"></path><circle cx="12" cy="12" r="3"></circle><line x1="2" x2="22" y1="2" y2="22"></line></svg>
-                      <svg v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye w-5 h-5"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                    </span>
-                 </div>
-                </div>
-
-                <!-- Botón de Envío Simulado -->
-                <button type="button" class="btn-submit">Ingresar</button>
-            </form>
-
-            <!-- Enlaces Inferiores (Flexbox Vertical) -->
-            <div class="login-footer-links">
-                <p> Ejemplo: Correo: 123@aol.com | Clave:123456 </p>
-                <hr class="divider">
-                <p>¿No posees una cuenta? <a href="#">Regístrate aquí</a></p>
-                <hr class="divider">
-                <p>¿Requieres asistencia? <a href="#">Recuperar</a></p>
-            </div>
+      <header class="login-header">
+        <div class="brand-logo-card">
+          <a href="/">
+            <img :src="logoBanco" alt="Banco Universitario Logo" class="brand-logo" />
+          </a>
         </div>
+        <p class="subtitle">Banca en Línea</p>
+      </header>
 
-        <a href="#" class="back-link">← Volver al inicio</a>
+      <div class="login-card">
+        <h2>Iniciar Sesión</h2>
+
+        <form class="login-form" @submit.prevent="submitLogin">
+          
+          <div class="input-group">
+            <label for="email">Correo Electrónico</label>
+            <div class="input-wrapper" :class="{ 'input-error-border': errorCorreo }">
+              <span class="input-icon">
+                <i class="bi bi-person"></i>
+              </span>
+              <input 
+                id="email" 
+                v-model="correo"
+                type="text" 
+                placeholder="Ingresa Correo Electronico"
+                @blur="validarCorreo"
+              />
+            </div>
+            <span v-if="errorCorreo" class="error-message">{{ errorCorreo }}</span>
+          </div>
+
+          <div class="input-group">
+            <label for="password">Contraseña</label>
+            <div class="input-wrapper" :class="{ 'input-error-border': errorPassword }">
+              <span class="input-icon">
+                <i class="bi bi-lock"></i>
+              </span>
+              <input 
+                id="password" 
+                v-model="password"
+                :type="mostrarPassword ? 'text' : 'password'" 
+                placeholder="Ingresa tu contraseña"
+                @blur="validarPassword"
+              />
+              <span class="toggle-password" @click="mostrarPassword = !mostrarPassword">
+                <i :class="mostrarPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+              </span>
+            </div>
+            <span v-if="errorPassword" class="error-message">{{ errorPassword }}</span>
+          </div>
+
+          <button type="submit" class="btn-submit">
+            Ingresar
+          </button>
+        </form>
+        <div class="login-footer-links">
+          <p class="signup-link">
+            ¿No tienes cuenta? <router-link to="/register" class="link-highlight">Regístrate aquí</router-link>
+          </p>
+          <hr class="divider">
+          <p class="recover-link">
+            ¿Olvidaste tu clave? <a href="#" class="link-highlight">Recuperar</a>
+          </p>
+        </div>
+      </div>
+
+      <router-link to="/" class="back-link">
+        <i class="bi bi-arrow-left"></i> Volver al inicio
+      </router-link>
     </div>
-
-  </body>
+  </div>
 </template>
-   <style scoped>
-/* Estilos Generales y Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif !important; /* Fuerza la fuente en todos los elementos contenedores */
+
+<style scoped>
+.auth-page-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f7fbfb;
+  overflow: hidden;
+  padding: 40px 20px;
+  z-index: 1;
 }
 
-/* Asegura que los campos de formulario hereden correctamente la tipografía */
-input, button, label, select, textarea {
-    font-family: 'Montserrat', sans-serif !important;
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: -1;
+  transition: all 0.5s ease;
 }
 
-/* El cuerpo usa Flexbox para centrar todo en la pantalla */
-body {
-    background-color: #f8fafc;
-    display: flex;
-    justify-content: center; /* Centrado horizontal */
-    align-items: center;     /* Centrado vertical */
-    min-height: 100vh;
-    color: #334155;
+.orb-1 {
+  width: 350px;
+  height: 350px;
+  background-color: #49beb7;
+  top: -100px;
+  left: -80px;
 }
 
-/* Contenedor Principal (Flexbox en columna) */
+.orb-2 {
+  width: 450px;
+  height: 450px;
+  background-color: #085f63;
+  bottom: -150px;
+  right: -100px;
+}
+
+.orb-3 {
+  width: 300px;
+  height: 300px;
+  background-color: #d8f3f1;
+  top: 40%;
+  left: 65%;
+}
+
 .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;     
-    width: 100%;
-    max-width: 440px;
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  z-index: 2;
+  animation: fadeIn 0.8s ease-out;
 }
 
-/* Encabezado */
 .login-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;     /* Centra el texto y subtítulo */
-    text-align: center;
-    margin-bottom: 24px;
+  text-align: center;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.login-header h1 {
-    font-size: 24px;
-    color: #0d9488;
-    font-weight: 700;
+.brand-logo-card {
+  background: #ffffff;
+  padding: 12px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(8, 95, 99, 0.04);
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(73, 190, 183, 0.08);
+  transition: transform 0.2s ease;
 }
 
-.login-header .subtitle {
-    font-size: 14px;
-    color: #64748b;
-    margin-top: 4px;
-    font-weight: 400;
+.brand-logo-card:hover {
+  transform: translateY(-1px);
 }
 
-/* Tarjeta del Formulario (Flexbox en columna) */
+.brand-logo {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+}
+
+.subtitle {
+  font-size: 13.5px;
+  color: #7c8e96;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
 .login-card {
-    background-color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 40px 30px;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  background-color: #f6f8fb;
+  width: 100%;
+  padding: 40px 32px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(8, 95, 99, 0.05);
+  border: 1px solid rgba(73, 190, 183, 0.1);
+  display: flex;
+  flex-direction: column;
 }
 
 .login-card h2 {
-    text-align: center;
-    font-size: 22px;
-    color: #111827;
-    margin-bottom: 28px;
-    font-weight: 600;
+  text-align: center;
+  font-size: 22px;
+  color: #085f63;
+  margin-bottom: 26px;
+  font-weight: 600;
 }
 
-/* Mensaje de error abajo del input */
-.error-message {
-    color: #dc2626; /* Color rojo de advertencia */
-    font-size: 11px;
-    font-weight: 500;
-    margin-top: 6px;
-    text-align: left;
+.status-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  line-height: 1.4;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
 }
 
-/* Clase dinámica para pintar el borde de rojo si la validación falla */
-.input-error-border input {
-    border-color: #dc2626 !important;
+.alert-success-custom {
+  background-color: #e6f7f4;
+  color: #0a6b5c;
+  border: 1px solid rgba(10, 107, 92, 0.15);
 }
 
-.input-error-border input:focus {
-    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.08) !important;
+.alert-danger-custom {
+  background-color: #fdf2f2;
+  color: #9b1c1c;
+  border: 1px solid rgba(155, 28, 28, 0.15);
 }
 
-/* Formulario (Flexbox en columna) */
 .login-form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Grupo de Entrada (Flexbox en columna para Label e Input) */
 .input-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
 }
 
 .input-group label {
-    font-size: 12px;
-    font-weight: 500;
-    color: #4b5563;
-    margin-bottom: 8px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #4e5d65;
+  margin-bottom: 8px;
+  text-align: left;
 }
 
-/* Contenedor interno del Input (Flexbox en fila) */
 .input-wrapper {
-    display: flex;
-    align-items: center;     /* Centra verticalmente los iconos con el input */
-    position: relative;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #d4dfdf;
+  border-radius: 10px;
+  transition: all 0.3s ease;
 }
 
-/* Iconos posicionados de forma absoluta respecto al wrapper */
+.input-wrapper:focus-within {
+  border-color: #49beb7;
+  box-shadow: 0 0 0 3px rgba(73, 190, 183, 0.15);
+}
+
 .input-icon {
-    position: absolute;
-    left: 14px;
-    font-size: 16px;
-    color: #9ca3af;
+  position: absolute;
+  left: 14px;
+  color: #8fa0a8;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
 }
 
 .toggle-password {
-    position: absolute;
-    right: 14px;
-    cursor: pointer;
-    font-size: 16px;
-    color: #9ca3af;
+  position: absolute;
+  right: 14px;
+  color: #8fa0a8;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: color 0.2s;
 }
 
-/* Input con padding izquierdo para no encimarse con el icono */
+.toggle-password:hover {
+  color: #085f63;
+}
+
 .input-wrapper input {
-    width: 100%;
-    padding: 14px 40px 14px 44px; /* Mayor padding a los lados por los iconos */
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s;
-    color: #1f2937;
+  width: 100%;
+  padding: 13px 40px 13px 42px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  color: #334148;
 }
 
-.input-wrapper input:focus {
-    border-color: #0d9488;
+.input-wrapper input::placeholder {
+  color: #a4b4bc;
 }
 
-/* Botón */
+.error-message {
+  color: #dc2626;
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 6px;
+  text-align: left;
+  animation: slideDown 0.2s ease;
+}
+
+.input-error-border {
+  border-color: #dc2626 !important;
+}
+
+.input-error-border:focus-within {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
 .btn-submit {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #0d9488, #115e59);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: opacity 0.2s;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #49beb7, #085f63);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(8, 95, 99, 0.15);
 }
 
 .btn-submit:hover {
-    opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(8, 95, 99, 0.25);
+  background: linear-gradient(135deg, #42b2ab, #075255);
 }
 
-/* Enlaces Inferiores (Flexbox en columna) */
+.btn-submit:active {
+  transform: translateY(0);
+}
+
 .login-footer-links {
-    display: flex;
-    flex-direction: column;
-    align-items: center;     /* Centra los textos de enlaces */
-    margin-top: 24px;
-    font-size: 13px;
-    color: #4b5563;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 24px;
+  font-size: 13.5px;
 }
 
-.login-footer-links a {
-    color: #0d9488;
-    text-decoration: none;
-    font-weight: 500;
+.login-footer-links p {
+  margin: 0;
+  color: #5d6e76;
 }
 
-.login-footer-links a:hover {
-    text-decoration: underline;
+.link-highlight {
+  color: #49beb7;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.link-highlight:hover {
+  color: #085f63;
+  text-decoration: underline;
 }
 
 .divider {
-    width: 100%;             /* Asegura que ocupe todo el ancho de la tarjeta */
-    border: 0;
-    border-top: 1px solid #e5e7eb;
-    margin: 16px 0;
+  width: 100%;
+  border: 0;
+  border-top: 1px solid rgba(8, 95, 99, 0.08);
+  margin: 14px 0;
 }
 
 .back-link {
-    margin-top: 20px;
-    font-size: 13px;
-    color: #6b7280;
-    text-decoration: none;
-    transition: color 0.2s;
+  margin-top: 24px;
+  font-size: 13.5px;
+  color: #5d6e76;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
 }
 
 .back-link:hover {
-    color: #374151;
+  color: #085f63;
+  transform: translateX(-2px);
 }
 
-</style> 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
