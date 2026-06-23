@@ -185,13 +185,13 @@ const formatDate = (dateStr) => {
 
 // Formatear Monto según multiplier (+Bs. X.XX o Bs. -X.XX)
 const formatAmount = (amount, multiplier) => {
-  const value = (amount / 100).toFixed(2)
+  const value = Number(amount).toFixed(2)
   return multiplier === 1 ? `+Bs. ${value}` : `Bs. -${value}`
 }
 
 // Formatear Balance (Bs. X.XX)
 const formatBalance = (balance) => {
-  const value = (balance / 100).toFixed(2)
+  const value = Number(balance).toFixed(2)
   return `Bs. ${value}`
 }
 
