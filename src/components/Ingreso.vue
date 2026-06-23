@@ -2,10 +2,21 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import logoBanco from '@/assets/logo-no-background.png'
+import authApi from '@/api/auth'
 
 const router = useRouter()
 
+// Variables reactivas
+const correo = ref('')
+const password = ref('')
+const errorCorreo = ref('')
+const errorPassword = ref('')
 const mostrarPassword = ref(false)
+
+const mensajeStatus = ref('')
+const mensajeTipo = ref('')
+const isLoading = ref(false)
+
 const validarCorreo = () => {
   const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -15,6 +26,59 @@ const validarCorreo = () => {
     errorCorreo.value = 'Ingresa un formato de correo electrónico válido (ejemplo@dominio.com).'
   } else {
     errorCorreo.value = ''
+  }
+}
+
+const validarPassword = () => {
+  if (!password.value) {
+    errorPassword.value = 'La contraseña es obligatoria.'
+  } else if (password.value.length < 6) {
+    errorPassword.value = 'La contraseña debe tener al menos 6 caracteres.'
+  } else {
+    errorPassword.value = ''
+  }
+}
+
+const submitLogin = async () => {
+  validarCorreo()
+  validarPassword()
+
+  if (errorCorreo.value || errorPassword.value) {
+    mensajeStatus.value = 'Fallo: Por favor corrige los errores del formulario.'
+    mensajeTipo.value = 'error'
+    return
+  }
+
+  isLoading.value = true
+  mensajeStatus.value = ''
+  mensajeTipo.value = ''
+
+  try {
+    const response = await authApi.login({
+      email: correo.value.trim(),
+      password: password.value
+    })
+
+    const token = response.data?.data?.jwt
+    if (token) {
+      localStorage.setItem('token', token)
+      mensajeStatus.value = 'Éxito: Sesión iniciada correctamente.'
+      mensajeTipo.value = 'success'
+
+      setTimeout(() => {
+        router.push('/movimientos')
+      }, 1000)
+    } else {
+      mensajeStatus.value = 'Fallo: No se recibió un token válido del servidor.'
+      mensajeTipo.value = 'error'
+    }
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error)
+    const errorMsg = error.response?.data?.message || error.message || 'Error al conectar con el servidor.'
+    mensajeStatus.value = `Fallo: ${errorMsg}`
+    mensajeTipo.value = 'error'
+  } finally {
+    isLoading.value = false
   }
 }
 </script>
@@ -37,6 +101,17 @@ const validarCorreo = () => {
 
       <div class="login-card">
         <h2>Iniciar Sesión</h2>
+
+        <Transition name="fade">
+          <div 
+            v-if="mensajeStatus" 
+            class="status-alert" 
+            :class="mensajeTipo === 'success' ? 'alert-success-custom' : 'alert-danger-custom'"
+          >
+            <i :class="mensajeTipo === 'success' ? 'bi bi-check-circle-fill' : 'bi bi-exclamation-triangle-fill'"></i>
+            <span>{{ mensajeStatus }}</span>
+          </div>
+        </Transition>
 
         <form class="login-form" @submit.prevent="submitLogin">
           
@@ -77,8 +152,9 @@ const validarCorreo = () => {
             <span v-if="errorPassword" class="error-message">{{ errorPassword }}</span>
           </div>
 
-          <button type="submit" class="btn-submit">
-            Ingresar
+          <button type="submit" class="btn-submit" :disabled="isLoading">
+            <span v-if="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            {{ isLoading ? 'Ingresando...' : 'Ingresar' }}
           </button>
         </form>
         <div class="login-footer-links">
