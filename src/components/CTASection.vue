@@ -5,10 +5,12 @@
       <p class="mb-5 opacity-75 mx-auto text-balance" style="max-width: 700px;">
         Únete a miles de estudiantes y académicos que ya confían en Banco Universitario para sus operaciones financieras diarias.
       </p>
-      <button class="btn btn-cta btn-lg px-4 py-3 fw-medium">
-        Acceder a banca en línea 
-        <span class="ms-2">→</span>
-      </button>
+      <a href="/login">
+        <button class="btn btn-cta btn-lg px-4 py-3 fw-medium">
+          Acceder a banca en línea 
+          <span class="ms-2">→</span>
+        </button>
+      </a>
     </div>
   </section>
 </template>

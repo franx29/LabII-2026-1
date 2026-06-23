@@ -1,12 +1,12 @@
 <template>
   <PublicLayout>
-    <Ingreso />
+    <Registro />
   </PublicLayout>
 </template>
 
 <script setup>
 import PublicLayout from '@/layouts/PublicLayout.vue'
-import Ingreso from '@/components/Ingreso.vue'
+import Registro from '@/components/Registro.vue'
 </script>
 
 <style scoped>

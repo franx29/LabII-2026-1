@@ -39,7 +39,7 @@
             </div>
 
             <div class="hero-actions">
-              <a href="#" class="btn hero-btn-primary">
+              <a href="/login" class="btn hero-btn-primary">
                 Abrir cuenta
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ms-2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>
