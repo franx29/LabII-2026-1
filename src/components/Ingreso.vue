@@ -510,4 +510,39 @@ const submitLogin = async () => {
 .fade-leave-to {
   opacity: 0;
 }
+
+@media (max-width: 768px) {
+  .login-card {
+    padding: 30px 24px;
+    border-radius: 16px;
+  }
+  .orb-1 {
+    width: 250px;
+    height: 250px;
+  }
+  .orb-2 {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-page-wrapper {
+    padding: 20px 12px;
+  }
+  .login-card {
+    padding: 24px 16px;
+    border-radius: 12px;
+  }
+  .login-header h1 {
+    font-size: 20px;
+  }
+  .subtitle {
+    font-size: 12px;
+  }
+  .brand-logo-card {
+    padding: 10px 20px;
+    margin-bottom: 16px;
+  }
+}
 </style>
