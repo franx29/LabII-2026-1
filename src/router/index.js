@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
+import RecoverView from '@/views/RecoverView.vue'
 
 // Rutas privadas (banca en línea)
 import MovementsView from '@/views/MovementsView.vue'
@@ -25,6 +26,12 @@ const routes = [
     path: '/register',
     name: 'register',
     component: RegisterView,
+    meta: { layout: 'public' },
+  },
+  {
+    path: '/recover',
+    name: 'recover',
+    component: RecoverView,
     meta: { layout: 'public' },
   },
   {
