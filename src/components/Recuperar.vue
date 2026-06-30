@@ -7,10 +7,14 @@ import authApi from '@/api/auth'
 const router = useRouter()
 
 // Variables reactivas generales
-const step = ref(1) // 1: Correo, 2: Pantalla de Carga, 3: Nueva contraseña
+const step = ref(1) // 1: Correo, 2: Código de seguridad, 3: Nueva contraseña
 const email = ref('')
 const errorEmail = ref('')
 const isLoading = ref(false)
+
+// Variables reactivas para el paso 2 (Código de Verificación)
+const recoveryCode = ref('')
+const errorRecoveryCode = ref('')
 
 // Variables reactivas para el paso 3 (Nueva Contraseña)
 const newPassword = ref('')
@@ -38,16 +42,6 @@ const validarEmail = () => {
   }
 }
 
-const iniciarProcesoVerificacion = () => {
-  step.value = 2
-  mensajeStatus.value = ''
-  mensajeTipo.value = ''
-  
-  setTimeout(() => {
-    step.value = 3
-  }, 2500)
-}
-
 const enviarCodigo = async () => {
   validarEmail()
   if (errorEmail.value) return
@@ -58,39 +52,45 @@ const enviarCodigo = async () => {
 
   try {
     // Intentar llamar al backend real
-    // En la API Go, si el correo NO existe, retorna éxito (200 OK) para evitar recolectar correos.
-    // Si el correo SÍ existe, intenta enviar el mail y retorna 500 (porque SMTP no está configurado).
     await authApi.forgotPassword(email.value.trim())
     
-    // Si no arrojó error (retornó 200 OK), significa que el correo no existe en la BD
-    errorEmail.value = 'El correo electrónico no está registrado en la base de datos.'
-    mensajeStatus.value = 'Fallo: El correo no está registrado.'
-    mensajeTipo.value = 'error'
+    // Si la llamada tiene éxito (200 OK), avanzamos al Paso 2
+    step.value = 2
   } catch (error) {
-    console.log('Forgot password status:', error.response?.status)
-    const statusCode = error.response?.status
-    
-    // Si retornó 500 (o error de mailer), significa que el correo sí existe en la BD
-    if (statusCode === 500 || error.message.includes('500')) {
-      // 1. Llamar al middleware de Vite para inyectar la semilla '123456' en la base Postgres en tiempo real
-      try {
-        await fetch(`/dev-seed-recover?email=${encodeURIComponent(email.value.trim())}`)
-        console.log('[Vite Seed] Semilla 123456 inyectada con éxito para', email.value)
-      } catch (e) {
-        console.error('Error al inyectar semilla en Vite:', e)
-      }
-
-      // 2. Transicionar de forma automatizada al paso de carga
-      iniciarProcesoVerificacion()
-    } else {
-      // Si fue otro tipo de error de red
-      const errorMsg = error.response?.data?.message || error.message || 'Error al conectar con el servidor.'
-      mensajeStatus.value = `Fallo: ${errorMsg}`
-      mensajeTipo.value = 'error'
-    }
+    console.error('API error (forgotPassword):', error)
+    const errorMsg = error.response?.data?.message || error.message || 'Error al conectar con el servidor.'
+    mensajeStatus.value = `Fallo: ${errorMsg}`
+    mensajeTipo.value = 'error'
   } finally {
     isLoading.value = false
   }
+}
+
+// --- PASO 2: LÓGICA DE VERIFICACIÓN DE CÓDIGO ---
+const validarRecoveryCode = () => {
+  if (!recoveryCode.value.trim()) {
+    errorRecoveryCode.value = 'El código de seguridad es obligatorio.'
+  } else if (!/^\d{6}$/.test(recoveryCode.value.trim())) {
+    errorRecoveryCode.value = 'El código debe constar de 6 dígitos numéricos.'
+  } else {
+    errorRecoveryCode.value = ''
+  }
+}
+
+const verificarCodigo = () => {
+  validarRecoveryCode()
+  if (errorRecoveryCode.value) return
+
+  isLoading.value = true
+  mensajeStatus.value = ''
+  mensajeTipo.value = ''
+
+  // La validación real del código ocurrirá en el paso 3 al llamar a /reset-password,
+  // por lo que aquí simplemente avanzamos al paso 3 de forma fluida.
+  setTimeout(() => {
+    isLoading.value = false
+    step.value = 3
+  }, 500)
 }
 
 // --- PASO 3: LÓGICA DE RESTABLECIMIENTO ---
@@ -126,9 +126,9 @@ const restablecerContrasena = async () => {
   mensajeStatus.value = ''
   mensajeTipo.value = ''
 
-  // Llamar al endpoint público real /reset-password utilizando el código sembrado '123456'
+  // Llamar al endpoint público real /reset-password utilizando el código de recuperación ingresado
   try {
-    await authApi.resetPassword(email.value.trim(), '123456', newPassword.value)
+    await authApi.resetPassword(email.value.trim(), recoveryCode.value.trim(), newPassword.value)
     
     mensajeStatus.value = 'Éxito: Contraseña restablecida correctamente.'
     mensajeTipo.value = 'success'
@@ -139,7 +139,7 @@ const restablecerContrasena = async () => {
   } catch (error) {
     console.error('API error (resetPassword):', error)
     
-    // Si falló en la API, mostramos el error real del backend (por ejemplo, si no se ejecutó el script de semilla)
+    // Si falló en la API, mostramos el error real del backend
     const errorMsg = error.response?.data?.message || error.message || 'Error al restablecer la contraseña.'
     mensajeStatus.value = `Fallo: ${errorMsg}`
     mensajeTipo.value = 'error'
@@ -156,6 +156,8 @@ const volverPasoAnterior = () => {
   mensajeStatus.value = ''
   mensajeTipo.value = ''
   if (step.value === 3) {
+    step.value = 2
+  } else if (step.value === 2) {
     step.value = 1
   }
 }
@@ -228,12 +230,42 @@ const volverPasoAnterior = () => {
           </button>
         </form>
 
-        <!-- --- PASO 2: Procesamiento y Verificación de Cuenta --- -->
-        <div v-else-if="step === 2" class="loading-step-wrapper">
-          <div class="loader-spinner"></div>
-          <p class="loading-message">Verificando cuenta y validando código de seguridad...</p>
-          <p class="loading-submessage">Por favor espera un momento, no cierres esta ventana.</p>
-        </div>
+        <!-- --- PASO 2: Código de Verificación --- -->
+        <form v-else-if="step === 2" class="recover-form" @submit.prevent="verificarCodigo">
+          <p class="step-instruction">
+            Hemos enviado un código de seguridad de 6 dígitos a tu correo electrónico. Por favor, ingrésalo a continuación para verificar tu cuenta.
+          </p>
+          <div class="alert-info-custom d-flex align-items-start gap-2 mb-4">
+            <i class="bi bi-info-circle-fill text-info-icon"></i>
+            <span class="alert-info-text">
+              <strong>Nota:</strong> Si no ves el correo en tu bandeja de entrada principal, asegúrate de revisar la carpeta de <strong>Correo no deseado (Spam)</strong>.
+            </span>
+          </div>
+
+          <div class="input-group">
+            <label for="recoveryCode">Código de Seguridad</label>
+            <div class="input-wrapper" :class="{ 'input-error-border': errorRecoveryCode }">
+              <span class="input-icon">
+                <i class="bi bi-shield-check"></i>
+              </span>
+              <input 
+                id="recoveryCode" 
+                v-model="recoveryCode"
+                type="text" 
+                placeholder="Ej. 123456"
+                maxlength="6"
+                @blur="validarRecoveryCode"
+                :disabled="isLoading"
+              />
+            </div>
+            <span v-if="errorRecoveryCode" class="error-message">{{ errorRecoveryCode }}</span>
+          </div>
+
+          <button type="submit" class="btn-submit" :disabled="isLoading">
+            <span v-if="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Verificar Código
+          </button>
+        </form>
 
         <!-- --- PASO 3: Nueva Contraseña --- -->
         <form v-else-if="step === 3" class="recover-form" @submit.prevent="restablecerContrasena">
@@ -753,5 +785,26 @@ const volverPasoAnterior = () => {
 @keyframes spin-loader {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.alert-info-custom {
+  background-color: #f0f7ff;
+  color: #0b57d0;
+  border: 1px solid rgba(11, 87, 208, 0.15);
+  display: flex;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.text-info-icon {
+  color: #0b57d0;
+  font-size: 16px;
+}
+
+.alert-info-text {
+  text-align: left;
 }
 </style>
