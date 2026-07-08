@@ -77,6 +77,15 @@ const limpiarRutaASeccion = (destino) => {
     if (seccion) {
       seccion.scrollIntoView({ behavior: 'smooth' })
     }
+
+    // Cerrar el menú colapsable de Bootstrap en móviles
+    const navbarCollapse = document.getElementById('mainNavbar')
+    if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+      const toggler = document.querySelector('.navbar-toggler')
+      if (toggler) {
+        toggler.click()
+      }
+    }
   }
 }
 </script>

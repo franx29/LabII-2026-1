@@ -13,7 +13,7 @@
     </div>
 
     <!-- Filtros de Búsqueda -->
-    <div class="filter-section d-flex align-items-center gap-2 mb-4" v-if="!isLoading && !errorMsg">
+    <div class="filter-section d-flex align-items-center flex-wrap gap-2 mb-4" v-if="!isLoading && !errorMsg">
       <span class="filter-label">
         <i class="bi bi-funnel"></i> Filtrar por:
       </span>
@@ -56,9 +56,8 @@
             <tr>
               <th scope="col" class="py-3 px-4">Fecha</th>
               <th scope="col" class="py-3 px-4">Descripción</th>
-              <th scope="col" class="py-3 px-4">Cuenta</th>
+              <th scope="col" class="py-3 px-4 d-none d-md-table-cell">Cuenta</th>
               <th scope="col" class="py-3 px-4 text-end">Monto</th>
-              <th scope="col" class="py-3 px-4 text-end">Balance</th>
             </tr>
           </thead>
           <tbody>
@@ -69,18 +68,15 @@
               <td class="px-4 py-3">
                 {{ movement.description }}
               </td>
-              <td class="px-4 py-3 text-muted font-monospace">
+              <td class="px-4 py-3 text-muted font-monospace d-none d-md-table-cell">
                 {{ movement.account_number }}
               </td>
               <td class="px-4 py-3 text-end font-monospace" :class="movement.multiplier === 1 ? 'text-income' : 'text-expense'">
                 {{ formatAmount(movement.amount, movement.multiplier) }}
               </td>
-              <td class="px-4 py-3 text-end font-monospace">
-                {{ formatBalance(movement.balance) }}
-              </td>
             </tr>
             <tr v-if="movements.length === 0">
-              <td colspan="5" class="empty-state">
+              <td colspan="4" class="empty-state">
                 <i class="bi bi-wallet2 empty-icon d-block"></i>
                 No se encontraron transacciones en esta categoría.
               </td>
@@ -396,5 +392,38 @@ onMounted(() => {
   font-size: 44px;
   color: #b0caca;
   margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+  .view-title {
+    font-size: 24px;
+  }
+  .filter-section {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 576px) {
+  .view-title {
+    font-size: 20px;
+  }
+  .view-subtitle {
+    font-size: 13px;
+  }
+  .table td {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  .btn-pagination {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  .page-indicator {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  .empty-state {
+    padding: 40px 16px !important;
+  }
 }
 </style>

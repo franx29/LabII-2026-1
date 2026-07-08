@@ -86,6 +86,7 @@ const logout = () => {
   display: flex;
   min-height: 100vh;
   background-color: #f7fbfb;
+  overflow-x: hidden;
 }
 
 /* Sidebar Styling */
@@ -219,76 +220,151 @@ const logout = () => {
   letter-spacing: 0.2px;
 }
 
-/* Main Content Area Styling */
 .main-content {
   flex-grow: 1;
   margin-left: 280px;
   min-height: 100vh;
   transition: margin-left 0.3s ease;
   background-color: #f7fbfb;
+  min-width: 0;
 }
 
 /* Responsividad para pantallas pequeñas */
 @media (max-width: 991px) {
+  /* Mover el sidebar al fondo de la pantalla como barra de navegación inferior */
   .sidebar {
-    width: 80px;
-    align-items: center;
+    width: 100% !important;
+    height: 68px !important;
+    position: fixed !important;
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    flex-direction: row !important;
+    padding: 0 !important;
+    box-shadow: 0 -4px 20px rgba(8, 95, 99, 0.08) !important;
+    display: grid !important;
+    grid-template-columns: 5fr 1fr !important;
+    align-items: center !important;
+    border-top: 1px solid rgba(73, 190, 183, 0.15) !important;
   }
-  
+
   .sidebar-top {
-    padding: 0 10px;
-    align-items: center;
+    padding: 0 !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    gap: 0 !important;
   }
 
   .brand-logo-card {
-    padding: 10px;
-    border-radius: 12px;
-  }
-  
-  .brand-logo {
-    height: 24px;
+    display: none !important;
   }
 
-  .nav-text, .logout-text {
-    display: none;
+  .sidebar-nav {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    width: 100% !important;
+    gap: 0 !important;
   }
 
   .nav-menu-item {
-    padding: 12px;
-    justify-content: center;
-    border-radius: 10px;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 8px 0 !important;
+    border-radius: 0 !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    background: transparent !important;
+  }
+
+  .nav-menu-item:hover {
+    background-color: transparent !important;
+    color: #ffffff !important;
+  }
+
+  .nav-menu-item.active {
+    color: #49beb7 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .nav-icon {
+    font-size: 20px !important;
+  }
+
+  .nav-text {
+    display: block !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+    text-align: center !important;
+  }
+
+  /* Footer / Logout */
+  .sidebar-footer {
+    padding: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
   }
 
   .btn-logout {
-    padding: 12px;
-    justify-content: center;
-    width: auto;
-    margin: 0 auto;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 8px 0 !important;
+    border-radius: 0 !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    background: transparent !important;
+    text-align: center !important;
+    width: 100% !important;
   }
 
-  .sidebar-footer {
-    padding: 0 10px;
-    width: 100%;
+  .btn-logout:hover {
+    background-color: transparent !important;
+    color: #ff8080 !important;
   }
 
+  .logout-icon {
+    font-size: 20px !important;
+  }
+
+  .logout-text {
+    display: block !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+    text-align: center !important;
+  }
+
+  /* Ajustar contenido principal */
   .main-content {
-    margin-left: 80px;
+    margin-left: 0 !important;
+    padding-bottom: 80px !important;
   }
 }
 
 @media (max-width: 576px) {
   .sidebar {
-    width: 60px;
+    height: 60px !important;
+  }
+  .nav-icon, .logout-icon {
+    font-size: 18px !important;
+  }
+  .nav-text, .logout-text {
+    font-size: 9px !important;
   }
   .main-content {
-    margin-left: 60px;
-    padding: 10px;
-  }
-  .nav-menu-item {
-    padding: 8px;
-  }
-  .nav-icon {
-    font-size: 16px;
+    padding-bottom: 72px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
   }
 }
 </style>
