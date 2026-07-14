@@ -5,17 +5,21 @@
       <div class="sidebar-top">
         <!-- Tarjeta de Logo del Banco -->
         <div class="brand-logo-card">
-          <router-link to="/movimientos">
+          <router-link to="/inicio">
             <img :src="logoBanco" alt="Banco Universitario Logo" class="brand-logo" />
           </router-link>
         </div>
 
         <!-- Menú de Navegación -->
         <nav class="sidebar-nav">
-          <a href="#" class="nav-menu-item" @click.prevent>
+          <router-link 
+            to="/inicio" 
+            class="nav-menu-item" 
+            :class="{ active: isActive('/inicio') }"
+          >
             <span class="nav-icon"><i class="bi bi-grid"></i></span>
             <span class="nav-text">Inicio</span>
-          </a>
+          </router-link>
 
           <a href="#" class="nav-menu-item" @click.prevent>
             <span class="nav-icon"><i class="bi bi-send"></i></span>
