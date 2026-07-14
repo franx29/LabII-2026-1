@@ -8,6 +8,7 @@ import RecoverView from '@/views/RecoverView.vue'
 
 // Rutas privadas (banca en línea)
 import MovementsView from '@/views/MovementsView.vue'
+import DashboardView from '@/views/DashboardView.vue'
 
 const routes = [
   {
@@ -33,6 +34,12 @@ const routes = [
     name: 'recover',
     component: RecoverView,
     meta: { layout: 'public' },
+  },
+  {
+    path: '/inicio',
+    name: 'dashboard',
+    component: DashboardView,
+    meta: { layout: 'private' },
   },
   {
     path: '/movimientos',

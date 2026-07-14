@@ -54,24 +54,24 @@
         <table class="table table-hover align-middle mb-0">
           <thead class="table-header-custom">
             <tr>
-              <th scope="col" class="py-3 px-4">Fecha</th>
-              <th scope="col" class="py-3 px-4">Descripción</th>
-              <th scope="col" class="py-3 px-4 d-none d-md-table-cell">Cuenta</th>
-              <th scope="col" class="py-3 px-4 text-end">Monto</th>
+              <th scope="col" class="py-3 px-4 text-center">Fecha</th>
+              <th scope="col" class="py-3 px-4 text-center">Descripción</th>
+              <th scope="col" class="py-3 px-4 text-center d-none d-md-table-cell">Cuenta</th>
+              <th scope="col" class="py-3 px-4 text-center">Monto</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="movement in movements" :key="movement.id">
-              <td class="px-4 py-3 text-nowrap">
+              <td class="px-4 py-3 text-center text-nowrap">
                 {{ formatDate(movement.created_at) }}
               </td>
-              <td class="px-4 py-3">
+              <td class="px-4 py-3 text-center">
                 {{ movement.description }}
               </td>
-              <td class="px-4 py-3 text-muted font-monospace d-none d-md-table-cell">
+              <td class="px-4 py-3 text-center text-muted font-monospace d-none d-md-table-cell">
                 {{ movement.account_number }}
               </td>
-              <td class="px-4 py-3 text-end font-monospace" :class="movement.multiplier === 1 ? 'text-income' : 'text-expense'">
+              <td class="px-4 py-3 text-center font-monospace" :class="movement.multiplier === 1 ? 'text-income' : 'text-expense'">
                 {{ formatAmount(movement.amount, movement.multiplier) }}
               </td>
             </tr>
@@ -179,10 +179,10 @@ const formatDate = (dateStr) => {
   return dateStr.substring(0, 10)
 }
 
-// Formatear Monto según multiplier (+Bs. X.XX o Bs. -X.XX)
+// Formatear Monto según multiplier (+Bs. X.XX o -Bs. X.XX)
 const formatAmount = (amount, multiplier) => {
   const value = Number(amount).toFixed(2)
-  return multiplier === 1 ? `+Bs. ${value}` : `Bs. -${value}`
+  return multiplier === 1 ? `+Bs. ${value}` : `-Bs. ${value}`
 }
 
 // Formatear Balance (Bs. X.XX)

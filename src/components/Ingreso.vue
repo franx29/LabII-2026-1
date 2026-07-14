@@ -66,7 +66,7 @@ const submitLogin = async () => {
       mensajeTipo.value = 'success'
 
       setTimeout(() => {
-        router.push('/movimientos')
+        router.push('/inicio')
       }, 1000)
     } else {
       mensajeStatus.value = 'Fallo: No se recibió un token válido del servidor.'
