@@ -2,12 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 // Rutas públicas (web institucional)
 import HomeView from '@/views/HomeView.vue'
-import LoginView from '../views/LoginView.vue'
+import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
+import RecoverView from '@/views/RecoverView.vue'
 
 // Rutas privadas (banca en línea)
+import MovementsView from '@/views/MovementsView.vue'
 import DashboardView from '@/views/DashboardView.vue'
-
 
 const routes = [
   {
@@ -29,12 +30,23 @@ const routes = [
     meta: { layout: 'public' },
   },
   {
-    path: '/dashboard',
+    path: '/recover',
+    name: 'recover',
+    component: RecoverView,
+    meta: { layout: 'public' },
+  },
+  {
+    path: '/inicio',
     name: 'dashboard',
     component: DashboardView,
     meta: { layout: 'private' },
   },
-
+  {
+    path: '/movimientos',
+    name: 'movements',
+    component: MovementsView,
+    meta: { layout: 'private' },
+  },
 ]
 
 const router = createRouter({

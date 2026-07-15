@@ -2,10 +2,21 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import logoBanco from '@/assets/logo-no-background.png'
+import authApi from '@/api/auth'
 
 const router = useRouter()
 
+// Variables reactivas
+const correo = ref('')
+const password = ref('')
+const errorCorreo = ref('')
+const errorPassword = ref('')
 const mostrarPassword = ref(false)
+
+const mensajeStatus = ref('')
+const mensajeTipo = ref('')
+const isLoading = ref(false)
+
 const validarCorreo = () => {
   const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -15,6 +26,59 @@ const validarCorreo = () => {
     errorCorreo.value = 'Ingresa un formato de correo electrónico válido (ejemplo@dominio.com).'
   } else {
     errorCorreo.value = ''
+  }
+}
+
+const validarPassword = () => {
+  if (!password.value) {
+    errorPassword.value = 'La contraseña es obligatoria.'
+  } else if (password.value.length < 6) {
+    errorPassword.value = 'La contraseña debe tener al menos 6 caracteres.'
+  } else {
+    errorPassword.value = ''
+  }
+}
+
+const submitLogin = async () => {
+  validarCorreo()
+  validarPassword()
+
+  if (errorCorreo.value || errorPassword.value) {
+    mensajeStatus.value = 'Fallo: Por favor corrige los errores del formulario.'
+    mensajeTipo.value = 'error'
+    return
+  }
+
+  isLoading.value = true
+  mensajeStatus.value = ''
+  mensajeTipo.value = ''
+
+  try {
+    const response = await authApi.login({
+      email: correo.value.trim(),
+      password: password.value
+    })
+
+    const token = response.data?.data?.jwt
+    if (token) {
+      localStorage.setItem('token', token)
+      mensajeStatus.value = 'Éxito: Sesión iniciada correctamente.'
+      mensajeTipo.value = 'success'
+
+      setTimeout(() => {
+        router.push('/inicio')
+      }, 1000)
+    } else {
+      mensajeStatus.value = 'Fallo: No se recibió un token válido del servidor.'
+      mensajeTipo.value = 'error'
+    }
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error)
+    const errorMsg = error.response?.data?.message || error.message || 'Error al conectar con el servidor.'
+    mensajeStatus.value = `Fallo: ${errorMsg}`
+    mensajeTipo.value = 'error'
+  } finally {
+    isLoading.value = false
   }
 }
 </script>
@@ -32,11 +96,21 @@ const validarCorreo = () => {
             <img :src="logoBanco" alt="Banco Universitario Logo" class="brand-logo" />
           </a>
         </div>
+        <h1>Iniciar Sesión</h1>
         <p class="subtitle">Banca en Línea</p>
       </header>
 
       <div class="login-card">
-        <h2>Iniciar Sesión</h2>
+        <Transition name="fade">
+          <div 
+            v-if="mensajeStatus" 
+            class="status-alert" 
+            :class="mensajeTipo === 'success' ? 'alert-success-custom' : 'alert-danger-custom'"
+          >
+            <i :class="mensajeTipo === 'success' ? 'bi bi-check-circle-fill' : 'bi bi-exclamation-triangle-fill'"></i>
+            <span>{{ mensajeStatus }}</span>
+          </div>
+        </Transition>
 
         <form class="login-form" @submit.prevent="submitLogin">
           
@@ -77,8 +151,9 @@ const validarCorreo = () => {
             <span v-if="errorPassword" class="error-message">{{ errorPassword }}</span>
           </div>
 
-          <button type="submit" class="btn-submit">
-            Ingresar
+          <button type="submit" class="btn-submit" :disabled="isLoading">
+            <span v-if="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            {{ isLoading ? 'Ingresando...' : 'Ingresar' }}
           </button>
         </form>
         <div class="login-footer-links">
@@ -87,7 +162,7 @@ const validarCorreo = () => {
           </p>
           <hr class="divider">
           <p class="recover-link">
-            ¿Olvidaste tu clave? <a href="#" class="link-highlight">Recuperar</a>
+            ¿Olvidaste tu clave? <router-link to="/recover" class="link-highlight">Recuperar</router-link>
           </p>
         </div>
       </div>
@@ -160,10 +235,15 @@ const validarCorreo = () => {
 
 .login-header {
   text-align: center;
-  margin-bottom: 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-bottom: 24px;
+}
+
+.login-header h1 {
+  font-family: 'Montserrat Alternates', sans-serif !important;
+  font-size: 24px;
+  color: #085f63;
+  font-weight: 700;
+  margin-bottom: 6px;
 }
 
 .brand-logo-card {
@@ -171,7 +251,7 @@ const validarCorreo = () => {
   padding: 12px 30px;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(8, 95, 99, 0.04);
-  margin-bottom: 12px;
+  margin-bottom: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -193,7 +273,6 @@ const validarCorreo = () => {
   font-size: 13.5px;
   color: #7c8e96;
   font-weight: 500;
-  letter-spacing: 0.5px;
   margin: 0;
 }
 
@@ -206,14 +285,6 @@ const validarCorreo = () => {
   border: 1px solid rgba(73, 190, 183, 0.1);
   display: flex;
   flex-direction: column;
-}
-
-.login-card h2 {
-  text-align: center;
-  font-size: 22px;
-  color: #085f63;
-  margin-bottom: 26px;
-  font-weight: 600;
 }
 
 .status-alert {
@@ -438,5 +509,40 @@ const validarCorreo = () => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    padding: 30px 24px;
+    border-radius: 16px;
+  }
+  .orb-1 {
+    width: 250px;
+    height: 250px;
+  }
+  .orb-2 {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-page-wrapper {
+    padding: 20px 12px;
+  }
+  .login-card {
+    padding: 24px 16px;
+    border-radius: 12px;
+  }
+  .login-header h1 {
+    font-size: 20px;
+  }
+  .subtitle {
+    font-size: 12px;
+  }
+  .brand-logo-card {
+    padding: 10px 20px;
+    margin-bottom: 16px;
+  }
 }
 </style>
