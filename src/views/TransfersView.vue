@@ -21,12 +21,6 @@
         <div>{{ errorMsg }}</div>
       </div>
 
-      <!-- Mensaje de Éxito / Validación Destinatario (Fase 2) -->
-      <div v-if="successMsg" class="alert alert-success-custom d-flex align-items-center gap-2 mb-4" role="alert">
-        <i class="bi bi-check-circle-fill"></i>
-        <div>{{ successMsg }}</div>
-      </div>
-
       <!-- Tarjeta de Saldo Disponible -->
       <div class="balance-bar card border-0 shadow-sm rounded-4 p-3 mb-4">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
@@ -192,7 +186,7 @@
       </form>
     </div>
 
-    <!-- Modal "Mis Afiliados" (Fase 3) -->
+    <!-- Modal "Mis Afiliados" (Fase 3 con corrección singular/plural) -->
     <div v-if="showAffiliatesModal" class="modal-backdrop-custom" @click="closeAffiliatesModal">
       <div class="modal-card-custom" @click.stop>
         <!-- Encabezado del Modal -->
@@ -204,7 +198,7 @@
             <div>
               <h3 class="modal-title-text m-0">Mis Afiliados</h3>
               <span class="modal-subtitle-text text-muted small" v-if="!isLoadingAffiliates">
-                {{ affiliates.length }} contactos
+                {{ affiliates.length }} {{ affiliates.length === 1 ? 'contacto' : 'contactos' }}
               </span>
             </div>
           </div>
@@ -264,7 +258,7 @@
 
             <!-- Estado Vacío (Sin resultados de búsqueda) -->
             <div v-if="filteredAffiliates.length === 0 && affiliateSearchQuery.trim() !== ''" class="py-5 text-center text-muted">
-              <i class="bi bi-search-heart fs-3 d-block mb-2"></i>
+              <i class="bi bi-search fs-3 d-block mb-2"></i>
               No se encontraron afiliados que coincidan con la búsqueda.
             </div>
 
@@ -279,10 +273,84 @@
         <!-- Pie del Modal -->
         <div class="modal-footer-custom d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-light">
           <span class="text-muted text-xs fw-semibold">
-            Total de afiliados: {{ affiliates.length }}
+            Total de afiliados: {{ affiliates.length }} {{ affiliates.length === 1 ? 'contacto' : 'contactos' }}
           </span>
           <button class="btn btn-outline-teal btn-sm px-3 rounded-2" @click="closeAffiliatesModal">
             Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal "Verifica los Datos" (Fase 4) -->
+    <div v-if="showConfirmModal" class="modal-backdrop-custom" @click="closeConfirmModal">
+      <div class="modal-card-custom confirm-modal" @click.stop>
+        <!-- Encabezado del Modal -->
+        <div class="modal-header-custom d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex align-items-center gap-2">
+            <div class="modal-title-icon-warning">
+              <i class="bi bi-exclamation-triangle text-teal"></i>
+            </div>
+            <h3 class="modal-title-text m-0">Verifica los Datos</h3>
+          </div>
+          <button class="btn-close-custom" @click="closeConfirmModal" :disabled="isSubmittingTransfer" aria-label="Cerrar modal">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+
+        <!-- Cuerpo del Modal -->
+        <div class="modal-body-custom">
+          <p class="text-muted text-sm mb-4">
+            Por favor, asegúrate de que la información del destinatario sea correcta antes de procesar la transacción.
+          </p>
+
+          <div class="confirm-details-card p-3 mb-3 rounded-3">
+            <div class="mb-3">
+              <span class="text-muted text-xs d-block uppercase-label">NÚMERO DE CUENTA</span>
+              <strong class="font-monospace text-sm d-block mt-1 text-dark-blue">{{ accountNumber }}</strong>
+            </div>
+
+            <div v-if="recipientUser" class="mb-3">
+              <span class="text-muted text-xs d-block uppercase-label">DESTINATARIO</span>
+              <strong class="text-sm d-block mt-1 text-dark-blue">{{ recipientUser.first_name }} {{ recipientUser.last_name }}</strong>
+            </div>
+
+            <div class="row">
+              <div class="col-6 mb-3">
+                <span class="text-muted text-xs d-block uppercase-label">MONTO</span>
+                <strong class="text-teal font-monospace text-sm d-block mt-1">Bs. {{ formatNumber(amount) }}</strong>
+              </div>
+              <div class="col-6 mb-3">
+                <span class="text-muted text-xs d-block uppercase-label">MONEDA</span>
+                <strong class="text-sm d-block mt-1 text-dark-blue">Bolívares (VES)</strong>
+              </div>
+            </div>
+
+            <div class="mb-0">
+              <span class="text-muted text-xs d-block uppercase-label">CONCEPTO</span>
+              <span class="text-sm font-monospace d-block mt-1 text-dark-blue">"{{ description }}"</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pie del Modal -->
+        <div class="modal-footer-custom d-flex justify-content-end gap-3 mt-3 pt-3 border-top border-light">
+          <button 
+            type="button"
+            class="btn btn-outline-teal btn-sm px-3 py-2 rounded-3" 
+            @click="closeConfirmModal" 
+            :disabled="isSubmittingTransfer"
+          >
+            Regresar
+          </button>
+          <button 
+            type="button"
+            class="btn btn-teal btn-sm px-4 py-2 rounded-3" 
+            @click="submitTransfer" 
+            :disabled="isSubmittingTransfer"
+          >
+            <span v-if="isSubmittingTransfer" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            {{ isSubmittingTransfer ? 'Procesando...' : 'Confirmar y Enviar' }}
           </button>
         </div>
       </div>
@@ -296,6 +364,7 @@ import { useRouter } from 'vue-router'
 import PrivateLayout from '@/layouts/PrivateLayout.vue'
 import userApi from '@/api/user'
 import contactsApi from '@/api/contacts'
+import transfersApi from '@/api/transfers'
 
 const router = useRouter()
 
@@ -325,6 +394,10 @@ const isLoadingAffiliates = ref(false)
 const errorAffiliatesMsg = ref('')
 const affiliateSearchQuery = ref('')
 const nameCache = ref({}) // key: account_number, value: { first_name, last_name, document_number }
+
+// Estados de Confirmación y Envío (Fase 4)
+const showConfirmModal = ref(false)
+const isSubmittingTransfer = ref(false)
 
 // Formateadores
 const formatNumber = (num) => {
@@ -441,8 +514,8 @@ const handleContinue = async () => {
     const res = await userApi.findByAccountNumber(accountNumber.value)
     recipientUser.value = res.data.data
     
-    // Éxito de validación para la Fase 2/3
-    successMsg.value = `¡Cuenta verificada con éxito! Destinatario: ${recipientUser.value.first_name} ${recipientUser.value.last_name} (${recipientUser.value.document_number || 'C.I. no disponible'}). Todo listo para la fase de confirmación.`
+    // Abre el modal de confirmación
+    openConfirmModal()
   } catch (err) {
     console.error('Error al verificar cuenta destino:', err)
     if (err.response && err.response.status === 404) {
@@ -452,6 +525,84 @@ const handleContinue = async () => {
     }
   } finally {
     isValidatingRecipient.value = false
+  }
+}
+
+// --- MÉTODOS DEL MODAL DE CONFIRMACIÓN (Fase 4) ---
+
+const openConfirmModal = () => {
+  showConfirmModal.value = true
+}
+
+const closeConfirmModal = () => {
+  showConfirmModal.value = false
+}
+
+// Realiza el POST de transferencia y, si corresponde, guarda el contacto
+const submitTransfer = async () => {
+  if (isSubmittingTransfer.value) return
+  isSubmittingTransfer.value = true
+  errorMsg.value = ''
+
+  try {
+    // 1. Crear la transferencia en el backend
+    const payload = {
+      account_number: accountNumber.value,
+      amount: Number(amount.value),
+      description: description.value.trim()
+    }
+    const transferRes = await transfersApi.createTransfer(payload)
+    const transferData = transferRes.data.data
+
+    // 2. Intentar guardar el contacto si el checkbox fue marcado
+    if (saveContact.value) {
+      try {
+        await contactsApi.createContact({
+          alias: contactAlias.value.trim(),
+          account_number: accountNumber.value,
+          description: description.value.trim()
+        })
+      } catch (contactErr) {
+        console.warn('Fallo no crítico al guardar el contacto frecuente en la base de datos:', contactErr)
+        // Ignoramos el error para no duplicar ni interrumpir la confirmación exitosa de transferencia
+      }
+    }
+
+    // 3. Estructurar el objeto del comprobante con los campos esenciales
+    const SESSION_KEY = 'bu_last_transfer_receipt'
+    const receiptData = {
+      id: transferData.id,
+      amount: transferData.amount,
+      account_number: transferData.account_number,
+      description: transferData.description,
+      created_at: transferData.created_at,
+      recipient: recipientUser.value ? `${recipientUser.value.first_name} ${recipientUser.value.last_name}` : 'No disponible',
+      document_number: recipientUser.value ? recipientUser.value.document_number : 'No disponible'
+    }
+
+    // Almacenar en sessionStorage con la clave centralizada
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(receiptData))
+
+    // Cerrar el modal de confirmación y navegar al comprobante
+    closeConfirmModal()
+    router.push({
+      name: 'transfer-receipt',
+      state: { receipt: receiptData }
+    })
+
+
+  } catch (err) {
+    console.error('Error al enviar la transferencia:', err)
+    closeConfirmModal()
+    
+    if (err.response && err.response.status === 401) {
+      localStorage.removeItem('token')
+      router.push('/login')
+    } else {
+      errorMsg.value = err.response?.data?.message || 'Error al procesar la transferencia con el servidor. Por favor, reintenta.'
+    }
+  } finally {
+    isSubmittingTransfer.value = false
   }
 }
 
@@ -546,8 +697,12 @@ const filteredAffiliates = computed(() => {
 
 // Manejar escape key en ventana
 const handleKeyDown = (e) => {
-  if (e.key === 'Escape' && showAffiliatesModal.value) {
-    closeAffiliatesModal()
+  if (e.key === 'Escape') {
+    if (showConfirmModal.value) {
+      closeConfirmModal()
+    } else if (showAffiliatesModal.value) {
+      closeAffiliatesModal()
+    }
   }
 }
 
@@ -742,7 +897,7 @@ onUnmounted(() => {
   font-size: 0.75rem !important;
 }
 
-/* MODAL STYLING (Fase 3) */
+/* MODAL STYLING (Fase 3 & 4) */
 .modal-backdrop-custom {
   position: fixed;
   top: 0;
@@ -771,6 +926,10 @@ onUnmounted(() => {
   max-height: 85vh;
 }
 
+.confirm-modal {
+  max-width: 480px;
+}
+
 @keyframes modal-scale {
   from {
     transform: scale(0.95);
@@ -784,6 +943,17 @@ onUnmounted(() => {
 
 .modal-title-icon {
   background-color: rgba(73, 190, 183, 0.1);
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+.modal-title-icon-warning {
+  background-color: rgba(245, 158, 11, 0.15);
   width: 42px;
   height: 42px;
   border-radius: 12px;
@@ -886,5 +1056,21 @@ onUnmounted(() => {
   border-radius: 8px;
   padding: 6px 10px;
   letter-spacing: 0.2px;
+}
+
+/* Confirmation modal details styling */
+.confirm-details-card {
+  background-color: #f8fafd;
+  border: 1px solid rgba(8, 95, 99, 0.06);
+}
+
+.uppercase-label {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: 10px !important;
+}
+
+.text-dark-blue {
+  color: #2c3e50;
 }
 </style>

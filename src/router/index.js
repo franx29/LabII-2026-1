@@ -73,8 +73,13 @@ router.beforeEach((to, from, next) => {
   if (to.meta.layout === 'private' && !token) {
     next('/login')
   } else {
+    // Clear last receipt if navigating to any page other than the receipt page
+    if (to.path !== '/transferencias/comprobante') {
+      sessionStorage.removeItem('bu_last_transfer_receipt')
+    }
     next()
   }
 })
+
 
 export default router
