@@ -68,7 +68,7 @@
               <button 
                 class="btn btn-teal px-3" 
                 type="button"
-                @click="onAffiliatesClick"
+                @click="openAffiliatesModal"
                 :disabled="isValidatingRecipient"
               >
                 <i class="bi bi-people-fill me-1"></i> Afiliados
@@ -191,14 +191,111 @@
         </div>
       </form>
     </div>
+
+    <!-- Modal "Mis Afiliados" (Fase 3) -->
+    <div v-if="showAffiliatesModal" class="modal-backdrop-custom" @click="closeAffiliatesModal">
+      <div class="modal-card-custom" @click.stop>
+        <!-- Encabezado del Modal -->
+        <div class="modal-header-custom d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex align-items-center gap-2">
+            <div class="modal-title-icon">
+              <i class="bi bi-people-fill text-teal"></i>
+            </div>
+            <div>
+              <h3 class="modal-title-text m-0">Mis Afiliados</h3>
+              <span class="modal-subtitle-text text-muted small" v-if="!isLoadingAffiliates">
+                {{ affiliates.length }} contactos
+              </span>
+            </div>
+          </div>
+          <button class="btn-close-custom" @click="closeAffiliatesModal" aria-label="Cerrar modal">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+
+        <!-- Cuerpo del Modal -->
+        <div class="modal-body-custom">
+          <!-- Filtro de Búsqueda -->
+          <div class="mb-3">
+            <div class="input-wrapper">
+              <span class="input-icon"><i class="bi bi-search"></i></span>
+              <input
+                type="text"
+                v-model="affiliateSearchQuery"
+                class="form-control px-input search-input"
+                placeholder="Buscar por nombre, cuenta o alias..."
+                :disabled="isLoadingAffiliates || affiliates.length === 0"
+              />
+            </div>
+          </div>
+
+          <!-- Alerta de error -->
+          <div v-if="errorAffiliatesMsg" class="alert alert-danger-custom py-2 px-3 mb-3 text-sm">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            {{ errorAffiliatesMsg }}
+          </div>
+
+          <!-- Cargando afiliados -->
+          <div v-if="isLoadingAffiliates" class="modal-loader py-5 text-center">
+            <div class="spinner-border text-teal spinner-border-sm mb-2" role="status"></div>
+            <p class="text-muted text-sm m-0">Obteniendo afiliados registrados...</p>
+          </div>
+
+          <!-- Lista de Afiliados (Scrollable) -->
+          <div v-else class="affiliates-list-container scroll-container">
+            <div 
+              v-for="contact in filteredAffiliates" 
+              :key="contact.id" 
+              class="affiliate-item-card p-3 mb-2 d-flex justify-content-between align-items-center"
+              @click="selectAffiliate(contact)"
+            >
+              <div>
+                <h4 class="affiliate-name m-0">{{ getContactName(contact) }}</h4>
+                <span class="affiliate-account font-monospace text-muted text-xs d-block mt-1">
+                  {{ contact.account_number }}
+                </span>
+              </div>
+              <div class="affiliate-tag-wrapper">
+                <span class="badge badge-alias-outline">
+                  {{ contact.alias }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Estado Vacío (Sin resultados de búsqueda) -->
+            <div v-if="filteredAffiliates.length === 0 && affiliateSearchQuery.trim() !== ''" class="py-5 text-center text-muted">
+              <i class="bi bi-search-heart fs-3 d-block mb-2"></i>
+              No se encontraron afiliados que coincidan con la búsqueda.
+            </div>
+
+            <!-- Estado Vacío (Sin afiliados agregados) -->
+            <div v-if="affiliates.length === 0" class="py-5 text-center text-muted">
+              <i class="bi bi-journal-x fs-3 d-block mb-2"></i>
+              Aún no tienes afiliados guardados en contactos frecuentes.
+            </div>
+          </div>
+        </div>
+
+        <!-- Pie del Modal -->
+        <div class="modal-footer-custom d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-light">
+          <span class="text-muted text-xs fw-semibold">
+            Total de afiliados: {{ affiliates.length }}
+          </span>
+          <button class="btn btn-outline-teal btn-sm px-3 rounded-2" @click="closeAffiliatesModal">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
   </PrivateLayout>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import PrivateLayout from '@/layouts/PrivateLayout.vue'
 import userApi from '@/api/user'
+import contactsApi from '@/api/contacts'
 
 const router = useRouter()
 
@@ -221,6 +318,14 @@ const successMsg = ref('')
 const validationErrors = ref({})
 const recipientUser = ref(null)
 
+// Estados de Afiliados (Fase 3)
+const showAffiliatesModal = ref(false)
+const affiliates = ref([])
+const isLoadingAffiliates = ref(false)
+const errorAffiliatesMsg = ref('')
+const affiliateSearchQuery = ref('')
+const nameCache = ref({}) // key: account_number, value: { first_name, last_name, document_number }
+
 // Formateadores
 const formatNumber = (num) => {
   return Number(num).toFixed(2)
@@ -234,11 +339,6 @@ const formatAccountNumber = (accNum) => {
 // Filtro de teclado para número de cuenta (solo dígitos)
 const onAccountInput = (e) => {
   accountNumber.value = e.target.value.replace(/\D/g, '')
-}
-
-// Clic visual en Afiliados
-const onAffiliatesClick = () => {
-  alert('El modal de afiliados se implementará en la siguiente fase (Fase 3).')
 }
 
 // Limpiar formulario y errores
@@ -341,7 +441,7 @@ const handleContinue = async () => {
     const res = await userApi.findByAccountNumber(accountNumber.value)
     recipientUser.value = res.data.data
     
-    // Éxito de validación para la Fase 2
+    // Éxito de validación para la Fase 2/3
     successMsg.value = `¡Cuenta verificada con éxito! Destinatario: ${recipientUser.value.first_name} ${recipientUser.value.last_name} (${recipientUser.value.document_number || 'C.I. no disponible'}). Todo listo para la fase de confirmación.`
   } catch (err) {
     console.error('Error al verificar cuenta destino:', err)
@@ -355,8 +455,109 @@ const handleContinue = async () => {
   }
 }
 
+// --- MÉTODOS DEL MODAL DE AFILIADOS (Fase 3) ---
+
+// Abrir el modal y cargar afiliados
+const openAffiliatesModal = async () => {
+  showAffiliatesModal.value = true
+  affiliateSearchQuery.value = ''
+  errorAffiliatesMsg.value = ''
+  isLoadingAffiliates.value = true
+  
+  try {
+    const res = await contactsApi.getContacts({ page_size: 100 })
+    affiliates.value = res.data.data || []
+    
+    // Resolver asíncronamente los nombres reales para la lista de contactos
+    resolveRealNames(affiliates.value)
+  } catch (err) {
+    console.error('Error al obtener lista de afiliados:', err)
+    errorAffiliatesMsg.value = 'Error al consultar el listado de afiliados en el servidor.'
+  } finally {
+    isLoadingAffiliates.value = false
+  }
+}
+
+// Cerrar el modal
+const closeAffiliatesModal = () => {
+  showAffiliatesModal.value = false
+}
+
+// Seleccionar un afiliado de la lista y cargarlo en el formulario
+const selectAffiliate = (contact) => {
+  accountNumber.value = contact.account_number
+  closeAffiliatesModal()
+  // Limpiar cualquier error anterior de la cuenta destino
+  if (validationErrors.value.accountNumber) {
+    validationErrors.value.accountNumber = ''
+  }
+}
+
+// Resolver nombres reales por número de cuenta de manera asíncrona usando caché
+const resolveRealNames = (contactsList) => {
+  contactsList.forEach(async (contact) => {
+    const accNum = contact.account_number
+    if (nameCache.value[accNum]) {
+      return
+    }
+    
+    // Asignar cargando temporalmente
+    nameCache.value[accNum] = { first_name: 'Cargando', last_name: 'nombre...' }
+    
+    try {
+      const userRes = await userApi.findByAccountNumber(accNum)
+      if (userRes.data && userRes.data.data) {
+        nameCache.value[accNum] = userRes.data.data
+      }
+    } catch (e) {
+      console.warn(`No se pudo resolver el titular para la cuenta ${accNum}:`, e)
+      // Fallback
+      nameCache.value[accNum] = { first_name: contact.alias, last_name: '(Verificar)' }
+    }
+  })
+}
+
+// Retornar el nombre formateado de un afiliado
+const getContactName = (contact) => {
+  const accNum = contact.account_number
+  const cached = nameCache.value[accNum]
+  if (cached) {
+    if (cached.first_name === 'Cargando') {
+      return 'Cargando nombre...'
+    }
+    return `${cached.first_name} ${cached.last_name}`
+  }
+  return 'Cargando nombre...'
+}
+
+// Filtrar afiliados en el frontend por nombre, cuenta o alias
+const filteredAffiliates = computed(() => {
+  const query = affiliateSearchQuery.value.trim().toLowerCase()
+  if (!query) return affiliates.value
+  
+  return affiliates.value.filter((contact) => {
+    const alias = (contact.alias || '').toLowerCase()
+    const accNum = (contact.account_number || '').toLowerCase()
+    const name = getContactName(contact).toLowerCase()
+    
+    return alias.includes(query) || accNum.includes(query) || name.includes(query)
+  })
+})
+
+// Manejar escape key en ventana
+const handleKeyDown = (e) => {
+  if (e.key === 'Escape' && showAffiliatesModal.value) {
+    closeAffiliatesModal()
+  }
+}
+
 onMounted(() => {
   loadAccountDetails()
+  window.addEventListener('keydown', handleKeyDown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown)
 })
 </script>
 
@@ -502,16 +703,16 @@ onMounted(() => {
 }
 
 /* Custom checkbox */
-.custom-checkbox {
+.form-check-input.custom-checkbox {
   border-color: rgba(8, 95, 99, 0.3);
 }
 
-.custom-checkbox:checked {
+.form-check-input.custom-checkbox:checked {
   background-color: #085f63;
   border-color: #085f63;
 }
 
-.custom-checkbox:focus {
+.form-check-input.custom-checkbox:focus {
   box-shadow: 0 0 0 0.25rem rgba(73, 190, 183, 0.12);
 }
 
@@ -539,5 +740,151 @@ onMounted(() => {
 
 .text-xs {
   font-size: 0.75rem !important;
+}
+
+/* MODAL STYLING (Fase 3) */
+.modal-backdrop-custom {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.modal-card-custom {
+  background-color: #ffffff;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 580px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(8, 95, 99, 0.08);
+  border: 1px solid rgba(8, 95, 99, 0.08);
+  animation: modal-scale 0.25s ease-out;
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+}
+
+@keyframes modal-scale {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-title-icon {
+  background-color: rgba(73, 190, 183, 0.1);
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+.modal-title-text {
+  font-family: 'Montserrat Alternates', sans-serif !important;
+  color: #085f63;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.btn-close-custom {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #7c8e96;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+.btn-close-custom:hover {
+  color: #085f63;
+  background-color: rgba(8, 95, 99, 0.05);
+}
+
+.search-input {
+  border-color: rgba(8, 95, 99, 0.12);
+  background-color: #fcfdfe;
+}
+
+.search-input:focus {
+  background-color: #ffffff;
+}
+
+.scroll-container {
+  overflow-y: auto;
+  max-height: 380px;
+  padding-right: 4px;
+}
+
+/* Custom scrollbar styling */
+.scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(8, 95, 99, 0.2);
+  border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(8, 95, 99, 0.4);
+}
+
+/* Contact row item design */
+.affiliate-item-card {
+  background-color: #fcfdfe;
+  border: 1px solid rgba(8, 95, 99, 0.06);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.affiliate-item-card:hover {
+  background-color: rgba(73, 190, 183, 0.05);
+  border-color: rgba(73, 190, 183, 0.25);
+  transform: translateY(-1px);
+}
+
+.affiliate-name {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.affiliate-account {
+  letter-spacing: 0.2px;
+}
+
+.badge-alias-outline {
+  border: 1px solid rgba(73, 190, 183, 0.35);
+  color: #129a90;
+  background-color: rgba(73, 190, 183, 0.04);
+  font-weight: 500;
+  font-size: 11px;
+  border-radius: 8px;
+  padding: 6px 10px;
+  letter-spacing: 0.2px;
 }
 </style>
