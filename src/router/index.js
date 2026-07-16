@@ -9,6 +9,8 @@ import RecoverView from '@/views/RecoverView.vue'
 // Rutas privadas (banca en línea)
 import MovementsView from '@/views/MovementsView.vue'
 import DashboardView from '@/views/DashboardView.vue'
+import TransfersView from '@/views/TransfersView.vue'
+import TransferReceiptView from '@/views/TransferReceiptView.vue'
 
 const routes = [
   {
@@ -47,6 +49,18 @@ const routes = [
     component: MovementsView,
     meta: { layout: 'private' },
   },
+  {
+    path: '/transferencias',
+    name: 'transfers',
+    component: TransfersView,
+    meta: { layout: 'private' },
+  },
+  {
+    path: '/transferencias/comprobante',
+    name: 'transfer-receipt',
+    component: TransferReceiptView,
+    meta: { layout: 'private' },
+  },
 ]
 
 const router = createRouter({
@@ -54,4 +68,13 @@ const router = createRouter({
   routes,
 })
 
-export default router
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  if (to.meta.layout === 'private' && !token) {
+    next('/login')
+  } else {
+    next()
+  }
+})
+
+export default router
