@@ -1,6 +1,13 @@
 <template>
   <PrivateLayout>
     <div class="receipt-page-container d-flex flex-column align-items-center py-4">
+      <!-- Mensaje de Estado de Descarga PDF -->
+      <div v-if="pdfStatusMsg" class="alert d-flex align-items-center gap-2 mb-4 w-100 max-w-actions" :class="pdfStatusType === 'success' ? 'alert-success-custom' : pdfStatusType === 'info' ? 'alert-info-custom' : 'alert-danger-custom'" role="alert">
+        <div v-if="pdfStatusType === 'info'" class="spinner-border spinner-border-sm text-teal" role="status"></div>
+        <i v-else :class="pdfStatusType === 'success' ? 'bi bi-check-circle-fill' : 'bi bi-exclamation-triangle-fill'"></i>
+        <div>{{ pdfStatusMsg }}</div>
+      </div>
+
       <!-- Icono e Indicador de Éxito -->
       <div class="success-header text-center mb-4">
         <div class="success-circle mb-3 d-flex align-items-center justify-content-center mx-auto">
@@ -11,7 +18,7 @@
       </div>
 
       <!-- Tarjeta del Comprobante (Ticket) -->
-      <div class="receipt-card card border-0 shadow rounded-4 overflow-hidden mb-4 p-4 p-md-5">
+      <div ref="receiptCard" class="receipt-card card border-0 shadow rounded-4 overflow-hidden mb-4 p-4 p-md-5">
         <div class="receipt-card-header text-center mb-4">
           <div class="bank-logo-badge mb-3 px-4 py-2 d-inline-block">
             Banco Universitario
@@ -79,19 +86,33 @@
 
       <!-- Botones de Acción -->
       <div class="receipt-actions-container d-flex flex-column flex-sm-row gap-3 justify-content-center w-100 max-w-actions mb-4">
-        <button class="btn btn-teal-action py-3 px-4 rounded-3 d-flex align-items-center justify-content-center gap-2" @click="onDownloadPlaceholder">
-          <i class="bi bi-download"></i> Descargar
+        <button 
+          class="btn btn-teal-action py-3 px-4 rounded-3 d-flex align-items-center justify-content-center gap-2" 
+          @click="downloadPdf"
+          :disabled="isDownloadingPdf"
+        >
+          <span v-if="isDownloadingPdf" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <i v-else class="bi bi-download"></i> 
+          {{ isDownloadingPdf ? 'Generando...' : 'Descargar' }}
         </button>
-        <button class="btn btn-teal-action py-3 px-4 rounded-3 d-flex align-items-center justify-content-center gap-2" @click="onPrintPlaceholder">
+        <button 
+          class="btn btn-teal-action py-3 px-4 rounded-3 d-flex align-items-center justify-content-center gap-2" 
+          @click="printReceipt"
+          :disabled="isDownloadingPdf"
+        >
           <i class="bi bi-printer"></i> Imprimir
         </button>
-        <button class="btn btn-outline-teal-action py-3 px-4 rounded-3 d-flex align-items-center justify-content-center gap-2" @click="newTransfer">
+        <button 
+          class="btn btn-outline-teal-action py-3 px-4 rounded-3 d-flex align-items-center justify-content-center gap-2" 
+          @click="newTransfer"
+          :disabled="isDownloadingPdf"
+        >
           <i class="bi bi-arrow-repeat"></i> Nueva Transferencia
         </button>
       </div>
 
       <!-- Enlace Volver al Inicio -->
-      <button class="btn btn-link text-teal text-decoration-none fw-semibold mb-5" @click="goHome">
+      <button class="btn btn-link text-teal text-decoration-none fw-semibold mb-5" @click="goHome" :disabled="isDownloadingPdf">
         Volver al Inicio
       </button>
     </div>
@@ -102,9 +123,15 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import PrivateLayout from '@/layouts/PrivateLayout.vue'
+import html2canvas from 'html2canvas'
+import { jsPDF } from 'jspdf'
 
 const router = useRouter()
 const receipt = ref(null)
+const receiptCard = ref(null)
+const isDownloadingPdf = ref(false)
+const pdfStatusMsg = ref('')
+const pdfStatusType = ref('')
 
 // Formateadores
 const formatNumber = (num) => {
@@ -138,13 +165,71 @@ const formatDateTime = (dateStr) => {
   }
 }
 
-// Marcadores de posición para las fases de Impresión y Descarga
-const onPrintPlaceholder = () => {
-  alert('La funcionalidad de impresión se habilitará en la Fase 6.')
+// Impresión real del comprobante (Fase 6)
+const printReceipt = () => {
+  window.print()
 }
 
-const onDownloadPlaceholder = () => {
-  alert('La funcionalidad de descarga en PDF se habilitará en la Fase 7.')
+// Descarga en PDF real del comprobante (Fase 7)
+const downloadPdf = async () => {
+  if (isDownloadingPdf.value) return
+  isDownloadingPdf.value = true
+  pdfStatusMsg.value = 'Generando comprobante en PDF...'
+  pdfStatusType.value = 'info'
+
+  try {
+    const cardEl = receiptCard.value
+    if (!cardEl) throw new Error('No se pudo encontrar la tarjeta del comprobante.')
+
+    // Capturar el ticket en un canvas de alta calidad (scale 2)
+    const canvas = await html2canvas(cardEl, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      logging: false
+    })
+
+    const imgData = canvas.toDataURL('image/png')
+    
+    // Crear PDF tamaño A4 vertical
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    })
+
+    const pdfWidth = pdf.internal.pageSize.getWidth()
+    const pdfHeight = pdf.internal.pageSize.getHeight()
+    
+    // Centrar en página A4 dejando márgenes de 15mm de cada lado
+    const maxPdfWidth = pdfWidth - 30 
+    const imgWidth = maxPdfWidth
+    const imgHeight = (canvas.height * imgWidth) / canvas.width
+
+    const xOffset = (pdfWidth - imgWidth) / 2
+    const yOffset = 20 // 20mm de margen superior
+
+    pdf.addImage(imgData, 'PNG', xOffset, yOffset, imgWidth, imgHeight)
+
+    const reference = receipt.value?.id || 'BU'
+    pdf.save(`comprobante-BU-${reference}.pdf`)
+
+    // Éxito de descarga
+    pdfStatusMsg.value = 'Comprobante descargado exitosamente'
+    pdfStatusType.value = 'success'
+    
+    // Ocultar mensaje automáticamente
+    setTimeout(() => {
+      pdfStatusMsg.value = ''
+    }, 4500)
+
+  } catch (error) {
+    console.error('Error al generar PDF:', error)
+    pdfStatusMsg.value = 'Error al generar el archivo PDF. Inténtalo nuevamente.'
+    pdfStatusType.value = 'danger'
+  } finally {
+    isDownloadingPdf.value = false
+  }
 }
 
 const SESSION_KEY = 'bu_last_transfer_receipt'
@@ -354,5 +439,121 @@ onMounted(() => {
 .btn-outline-teal-action:hover {
   background-color: rgba(8, 95, 99, 0.03);
   transform: translateY(-1px);
+}
+
+/* Alertas de descarga */
+.alert-success-custom {
+  background-color: #f3faf7;
+  color: #03543f;
+  border: 1px solid rgba(3, 84, 63, 0.15);
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.alert-danger-custom {
+  background-color: #fdf2f2;
+  color: #9b1c1c;
+  border: 1px solid rgba(155, 28, 28, 0.15);
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.alert-info-custom {
+  background-color: #f0fdfa;
+  color: #0d9488;
+  border: 1px solid rgba(13, 148, 136, 0.15);
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* --- ESTILOS DE IMPRESIÓN (Fase 6) --- */
+@media print {
+  html, body, #app {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Ocultar barra lateral, header, pie de página, botones e indicadores generales */
+  .sidebar,
+  .brand-logo-card,
+  .sidebar-nav,
+  .sidebar-footer,
+  aside,
+  nav,
+  .receipt-actions-container,
+  .btn,
+  .btn-link,
+  a,
+  .success-header,
+  .alert,
+  .alert-success-custom,
+  .alert-danger-custom,
+  .alert-info-custom {
+    display: none !important;
+  }
+
+  /* Resetear el layout principal y desactivar flexbox */
+  .private-layout-wrapper,
+  .main-content,
+  .container-fluid {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    box-shadow: none !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* Centrar el ticket en la hoja sin usar 100vh */
+  .receipt-page-container {
+    display: block !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    overflow: visible !important;
+  }
+
+  /* Ajustar tamaño y evitar cortes en la tarjeta de comprobante */
+  .receipt-card {
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: none !important;
+    margin: 20px auto !important;
+    padding: 30px !important;
+    width: 100% !important;
+    max-width: 480px !important;
+    background-color: #ffffff !important;
+    box-sizing: border-box !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    overflow: visible !important;
+  }
+
+  /* Tamaño A4 vertical sin cabecera de navegador */
+  @page {
+    size: A4 portrait;
+    margin: 1.5cm;
+  }
 }
 </style>
