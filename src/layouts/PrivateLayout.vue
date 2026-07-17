@@ -21,10 +21,14 @@
             <span class="nav-text">Inicio</span>
           </router-link>
 
-          <a href="#" class="nav-menu-item" @click.prevent>
+          <router-link 
+            to="/transferencias" 
+            class="nav-menu-item" 
+            :class="{ active: isActive('/transferencias') || isActive('/transferencias/comprobante') }"
+          >
             <span class="nav-icon"><i class="bi bi-send"></i></span>
             <span class="nav-text">Transferencias</span>
-          </a>
+          </router-link>
 
           <a href="#" class="nav-menu-item" @click.prevent>
             <span class="nav-icon"><i class="bi bi-people"></i></span>

@@ -6,5 +6,9 @@ export default {
   },
   getBalance() {
     return apiClient.get('/v1/client/user/balance')
+  },
+  findByAccountNumber(accountNumber) {
+    return apiClient.get(`/v1/client/user/account/${accountNumber}`)
   }
 }
+
