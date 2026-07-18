@@ -45,10 +45,14 @@
             <span class="nav-text">Movimientos</span>
           </router-link>
 
-          <a href="#" class="nav-menu-item" @click.prevent>
+          <router-link 
+            to="/perfil" 
+            class="nav-menu-item" 
+            :class="{ active: isActive('/perfil') }"
+          >
             <span class="nav-icon"><i class="bi bi-person"></i></span>
             <span class="nav-text">Mi Perfil</span>
-          </a>
+          </router-link>
         </nav>
       </div>
 

@@ -1,10 +1,11 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import logoBanco from '@/assets/logo-no-background.png'
 import authApi from '@/api/auth'
 
 const router = useRouter()
+const route = useRoute()
 
 // Variables reactivas
 const correo = ref('')
@@ -81,6 +82,12 @@ const submitLogin = async () => {
     isLoading.value = false
   }
 }
+
+onMounted(() => {
+  if (route.query.email) {
+    correo.value = route.query.email
+  }
+})
 </script>
 
 <template>

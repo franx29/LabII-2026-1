@@ -11,6 +11,7 @@ import MovementsView from '@/views/MovementsView.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import TransfersView from '@/views/TransfersView.vue'
 import TransferReceiptView from '@/views/TransferReceiptView.vue'
+import ProfileView from '@/views/ProfileView.vue'
 
 const routes = [
   {
@@ -59,6 +60,12 @@ const routes = [
     path: '/transferencias/comprobante',
     name: 'transfer-receipt',
     component: TransferReceiptView,
+    meta: { layout: 'private' },
+  },
+  {
+    path: '/perfil',
+    name: 'profile',
+    component: ProfileView,
     meta: { layout: 'private' },
   },
 ]
