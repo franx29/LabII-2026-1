@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <PrivateLayout>
     <!-- Cabecera de la Vista -->
     <header class="view-header mb-4">
@@ -1074,3 +1074,5 @@ onUnmounted(() => {
   color: #2c3e50;
 }
 </style>
+
+
