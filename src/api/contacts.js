@@ -6,6 +6,7 @@ export default {
   },
   createContact(payload) {
     return apiClient.post('/v1/client/contact', payload)
+<<<<<<< HEAD
   },
   updateContact(id, payload) {
     return apiClient.patch(`/v1/client/contact/${id}`, {
@@ -17,3 +18,7 @@ export default {
     return apiClient.delete(`/v1/client/contact/${id}`)
   }
 }
+=======
+  }
+}
+>>>>>>> 0fd1fe512b26c00455ffc1c7f0a2c69ece31b81f
