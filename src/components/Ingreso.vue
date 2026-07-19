@@ -66,7 +66,7 @@ const submitLogin = async () => {
       mensajeTipo.value = 'success'
 
       setTimeout(() => {
-        router.push('/movimientos')
+        router.push('/inicio')
       }, 1000)
     } else {
       mensajeStatus.value = 'Fallo: No se recibió un token válido del servidor.'
@@ -96,12 +96,11 @@ const submitLogin = async () => {
             <img :src="logoBanco" alt="Banco Universitario Logo" class="brand-logo" />
           </a>
         </div>
+        <h1>Iniciar Sesión</h1>
         <p class="subtitle">Banca en Línea</p>
       </header>
 
       <div class="login-card">
-        <h2>Iniciar Sesión</h2>
-
         <Transition name="fade">
           <div 
             v-if="mensajeStatus" 
@@ -163,7 +162,7 @@ const submitLogin = async () => {
           </p>
           <hr class="divider">
           <p class="recover-link">
-            ¿Olvidaste tu clave? <a href="#" class="link-highlight">Recuperar</a>
+            ¿Olvidaste tu clave? <router-link to="/recover" class="link-highlight">Recuperar</router-link>
           </p>
         </div>
       </div>
@@ -236,10 +235,15 @@ const submitLogin = async () => {
 
 .login-header {
   text-align: center;
-  margin-bottom: 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-bottom: 24px;
+}
+
+.login-header h1 {
+  font-family: 'Montserrat Alternates', sans-serif !important;
+  font-size: 24px;
+  color: #085f63;
+  font-weight: 700;
+  margin-bottom: 6px;
 }
 
 .brand-logo-card {
@@ -247,7 +251,7 @@ const submitLogin = async () => {
   padding: 12px 30px;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(8, 95, 99, 0.04);
-  margin-bottom: 12px;
+  margin-bottom: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -269,7 +273,6 @@ const submitLogin = async () => {
   font-size: 13.5px;
   color: #7c8e96;
   font-weight: 500;
-  letter-spacing: 0.5px;
   margin: 0;
 }
 
@@ -282,14 +285,6 @@ const submitLogin = async () => {
   border: 1px solid rgba(73, 190, 183, 0.1);
   display: flex;
   flex-direction: column;
-}
-
-.login-card h2 {
-  text-align: center;
-  font-size: 22px;
-  color: #085f63;
-  margin-bottom: 26px;
-  font-weight: 600;
 }
 
 .status-alert {
@@ -514,5 +509,40 @@ const submitLogin = async () => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    padding: 30px 24px;
+    border-radius: 16px;
+  }
+  .orb-1 {
+    width: 250px;
+    height: 250px;
+  }
+  .orb-2 {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-page-wrapper {
+    padding: 20px 12px;
+  }
+  .login-card {
+    padding: 24px 16px;
+    border-radius: 12px;
+  }
+  .login-header h1 {
+    font-size: 20px;
+  }
+  .subtitle {
+    font-size: 12px;
+  }
+  .brand-logo-card {
+    padding: 10px 20px;
+    margin-bottom: 16px;
+  }
 }
 </style>

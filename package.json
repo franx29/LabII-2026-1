@@ -6,12 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "db:seed-recover": "docker exec -i bank-service-postgres psql -U root -d db -c \"INSERT INTO password_reset_code (user_id, code_hash, expires_at, attempts, created_at, updated_at) SELECT id, '$2a$10$hmIWez3YRKN.hhz68tB1UuQmhKICvzFjSP4yuVMVHY8zADF6cxew.', NOW() + INTERVAL '1 hour', 0, NOW(), NOW() FROM \\\"user\\\";\""
   },
   "dependencies": {
     "axios": "^1.18.1",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
     "vue": "^3.5.32",
     "vue-router": "^4.6.4"
   },
