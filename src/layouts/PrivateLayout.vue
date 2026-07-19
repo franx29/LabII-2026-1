@@ -244,7 +244,6 @@ const logout = () => {
 
 /* Responsividad para pantallas pequeñas */
 @media (max-width: 991px) {
-  /* Mover el sidebar al fondo de la pantalla como barra de navegación inferior */
   .sidebar {
     width: 100% !important;
     height: 68px !important;
@@ -257,7 +256,7 @@ const logout = () => {
     padding: 0 !important;
     box-shadow: 0 -4px 20px rgba(8, 95, 99, 0.08) !important;
     display: grid !important;
-    grid-template-columns: repeat(5, 1fr) !important;
+    grid-template-columns: 5fr 1fr !important;
     align-items: center !important;
     border-top: 1px solid rgba(73, 190, 183, 0.15) !important;
   }
@@ -317,7 +316,6 @@ const logout = () => {
     text-align: center !important;
   }
 
-  /* Footer / Logout */
   .sidebar-footer {
     padding: 0 !important;
     display: flex !important;
@@ -357,7 +355,6 @@ const logout = () => {
     text-align: center !important;
   }
 
-  /* Ajustar contenido principal */
   .main-content {
     margin-left: 0 !important;
     padding-bottom: 80px !important;
