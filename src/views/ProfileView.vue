@@ -15,12 +15,47 @@
       <div>{{ errorMsg }}</div>
     </div>
 
-    <!-- Spinner de Carga -->
-    <div v-if="isLoading" class="loader-container d-flex flex-column justify-content-center align-items-center py-5">
-      <div class="spinner-border text-teal mb-3" role="status">
-        <span class="visually-hidden">Cargando...</span>
+    <!-- Esqueleto de Carga (Skeleton Loader) -->
+    <div v-if="isLoading" class="profile-skeleton">
+      <!-- Tarjeta Superior (Resumen) -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background-color: #ffffff; border: 1px solid rgba(8, 95, 99, 0.08) !important;">
+        <div class="d-flex align-items-center gap-3 gap-sm-4">
+          <div class="skeleton-loader skeleton-circle" style="width: 72px; height: 72px;"></div>
+          <div class="w-50">
+            <div class="skeleton-loader skeleton-text" style="width: 60%; height: 22px;"></div>
+            <div class="skeleton-loader skeleton-text" style="width: 40%; height: 16px; margin-bottom: 0;"></div>
+          </div>
+        </div>
       </div>
-      <p class="text-muted">Cargando tu perfil...</p>
+
+      <!-- Datos Personales Card -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background-color: #ffffff; border: 1px solid rgba(8, 95, 99, 0.08) !important;">
+        <div class="skeleton-loader skeleton-text mb-4" style="width: 180px; height: 22px;"></div>
+        <div class="row g-4">
+          <div class="col-12 col-md-6" v-for="i in 4" :key="i">
+            <div class="skeleton-loader skeleton-text mb-2" style="width: 100px; height: 14px;"></div>
+            <div class="skeleton-loader skeleton-text" style="height: 45px; border-radius: 10px; margin-bottom: 0;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cambiar Contraseña Card -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background-color: #ffffff; border: 1px solid rgba(8, 95, 99, 0.08) !important;">
+        <div class="skeleton-loader skeleton-text mb-4" style="width: 200px; height: 22px;"></div>
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="skeleton-loader skeleton-text mb-2" style="width: 120px; height: 14px;"></div>
+            <div class="skeleton-loader skeleton-text" style="height: 45px; border-radius: 10px; margin-bottom: 0;"></div>
+          </div>
+          <div class="col-12 col-md-6" v-for="i in 2" :key="i">
+            <div class="skeleton-loader skeleton-text mb-2" style="width: 120px; height: 14px;"></div>
+            <div class="skeleton-loader skeleton-text" style="height: 45px; border-radius: 10px; margin-bottom: 0;"></div>
+          </div>
+          <div class="col-12 d-flex justify-content-end mt-4">
+            <div class="skeleton-loader skeleton-button w-100" style="height: 45px; border-radius: 10px;"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Contenido de Perfil -->

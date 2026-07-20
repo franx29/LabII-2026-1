@@ -13,12 +13,77 @@
       <div>{{ errorMsg }}</div>
     </div>
 
-    <!-- Contenedor del Dashboard -->
-    <div v-if="isLoading" class="loader-container d-flex flex-column justify-content-center align-items-center py-5">
-      <div class="spinner-border text-teal mb-3" role="status">
-        <span class="visually-hidden">Cargando...</span>
+    <!-- Esqueleto de Carga (Skeleton Loader) -->
+    <div v-if="isLoading" class="dashboard-skeleton">
+      <!-- Tarjeta de Balance -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background-color: #ffffff; border: 1px solid rgba(8, 95, 99, 0.08) !important;">
+        <div class="skeleton-loader skeleton-text mb-2" style="width: 150px; height: 14px;"></div>
+        <div class="skeleton-loader skeleton-text mb-4" style="width: 250px; height: 38px;"></div>
+        <div class="d-flex justify-content-between align-items-end mt-2">
+          <div class="w-50">
+            <div class="skeleton-loader skeleton-text mb-2" style="width: 120px; height: 12px;"></div>
+            <div class="skeleton-loader skeleton-text" style="width: 80%; height: 20px; margin-bottom: 0;"></div>
+          </div>
+          <div class="skeleton-loader skeleton-button" style="width: 80px; height: 32px; border-radius: 10px;"></div>
+        </div>
       </div>
-      <p class="text-muted">Cargando tu panel de control...</p>
+
+      <!-- Quick Actions Grid -->
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-md-4" v-for="i in 3" :key="i">
+          <div class="card border-0 shadow-sm rounded-4 p-4" style="background-color: #ffffff; border: 1px solid rgba(8, 95, 99, 0.08) !important; height: 96px;">
+            <div class="d-flex align-items-center gap-3">
+              <div class="skeleton-loader" style="width: 46px; height: 46px; border-radius: 8px;"></div>
+              <div class="w-50">
+                <div class="skeleton-loader skeleton-text mb-2" style="width: 90%; height: 16px;"></div>
+                <div class="skeleton-loader skeleton-text" style="width: 60%; height: 12px; margin-bottom: 0;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BCV Rates Card -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background-color: #ffffff; border: 1px solid rgba(8, 95, 99, 0.08) !important;">
+        <div class="skeleton-loader skeleton-text mb-3" style="width: 220px; height: 20px;"></div>
+        <div class="row g-3">
+          <div class="col-12 col-sm-6" v-for="i in 2" :key="i">
+            <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background-color: #f8fafb; border: 1px solid #edf2f2;">
+              <div class="skeleton-loader skeleton-circle" style="width: 40px; height: 40px;"></div>
+              <div class="w-50">
+                <div class="skeleton-loader skeleton-text mb-2" style="width: 40px; height: 12px;"></div>
+                <div class="skeleton-loader skeleton-text" style="width: 100px; height: 18px; margin-bottom: 0;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Transactions Card -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background-color: #ffffff; border: 1px solid rgba(8, 95, 99, 0.08) !important;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div class="skeleton-loader skeleton-text" style="width: 180px; height: 20px; margin-bottom: 0;"></div>
+          <div class="skeleton-loader skeleton-button" style="width: 80px; height: 28px; border-radius: 8px;"></div>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead>
+              <tr>
+                <th v-for="i in 3" :key="i" class="border-0">
+                  <div class="skeleton-loader skeleton-text mx-auto" style="width: 60px; height: 14px;"></div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="row in 3" :key="row">
+                <td v-for="col in 3" :key="col" class="py-3 border-light">
+                  <div class="skeleton-loader skeleton-text mx-auto" style="width: 70%; height: 14px; margin-bottom: 0;"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <div v-else class="dashboard-content">
