@@ -30,12 +30,17 @@
             <span class="nav-text">Transferencias</span>
           </router-link>
 
-          <a href="#" class="nav-menu-item" @click.prevent>
-            <span class="nav-icon"><i class="bi bi-people"></i></span>
+          <!-- Enlace de Afiliados -->
+          <router-link 
+            to="/contactos" 
+            class="nav-menu-item" 
+            :class="{ active: isActive('/contactos') }"
+          >
+            <span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span>
             <span class="nav-text">Afiliados</span>
-          </a>
+          </router-link>
 
-          <!-- Movimientos is highlighted based on route -->
+          <!-- Movimientos -->
           <router-link 
             to="/movimientos" 
             class="nav-menu-item" 
@@ -243,7 +248,6 @@ const logout = () => {
 
 /* Responsividad para pantallas pequeñas */
 @media (max-width: 991px) {
-  /* Mover el sidebar al fondo de la pantalla como barra de navegación inferior */
   .sidebar {
     width: 100% !important;
     height: 68px !important;
@@ -316,7 +320,6 @@ const logout = () => {
     text-align: center !important;
   }
 
-  /* Footer / Logout */
   .sidebar-footer {
     padding: 0 !important;
     display: flex !important;
@@ -356,7 +359,6 @@ const logout = () => {
     text-align: center !important;
   }
 
-  /* Ajustar contenido principal */
   .main-content {
     margin-left: 0 !important;
     padding-bottom: 80px !important;

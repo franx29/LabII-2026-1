@@ -116,7 +116,7 @@
             </div>
           </div>
 
-          <!-- Checkbox Guardar Contacto -->
+          <!-- Checkbox Guardar Afiliado -->
           <div class="form-check mb-3">
             <input
               id="saveContact"
@@ -126,14 +126,14 @@
               :disabled="isValidatingRecipient"
             />
             <label class="form-check-label select-none" for="saveContact">
-              Guardar en contactos frecuentes
+              Guardar en mis afiliados frecuentes
             </label>
           </div>
 
           <!-- Input Alias Dinámico -->
           <Transition name="slide-fade">
             <div v-if="saveContact" class="mb-3">
-              <label for="contactAlias" class="form-label">Alias del Contacto</label>
+              <label for="contactAlias" class="form-label">Alias del Afiliado</label>
               <div class="input-wrapper">
                 <span class="input-icon"><i class="bi bi-tag"></i></span>
                 <input
@@ -513,11 +513,11 @@ const handleContinue = async () => {
 
   if (saveContact.value) {
     if (!contactAlias.value.trim()) {
-      validationErrors.value.contactAlias = 'El alias es obligatorio para guardar el contacto.'
-      hasErrors = true
+      validationErrors.value.contactAlias = 'El alias es obligatorio para guardar el afiliado.';
+      hasErrors = true;
     } else if (contactAlias.value.trim().length > 20) {
-      validationErrors.value.contactAlias = 'El alias no puede exceder los 20 caracteres.'
-      hasErrors = true
+      validationErrors.value.contactAlias = 'El alias no puede exceder los 20 caracteres.';
+      hasErrors = true;
     }
   }
 

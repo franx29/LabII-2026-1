@@ -113,7 +113,7 @@
       <div class="row g-3 mb-4">
         <!-- Transferir -->
         <div class="col-12 col-md-4">
-          <div class="action-card rounded-4 p-4 text-white d-flex align-items-center gap-3 shadow-sm h-100">
+          <router-link to="/transferencias" class="action-card rounded-4 p-4 text-white d-flex align-items-center gap-3 shadow-sm h-100 text-decoration-none">
             <div class="action-icon-wrapper rounded-3">
               <i class="bi bi-arrow-up-right"></i>
             </div>
@@ -121,7 +121,7 @@
               <h3 class="action-title m-0">Transferir</h3>
               <p class="action-description text-white-50 m-0">Enviar fondos a cuentas</p>
             </div>
-          </div>
+          </router-link>
         </div>
         
         <!-- Ver Movimientos -->
@@ -139,7 +139,7 @@
 
         <!-- Ver Afiliados -->
         <div class="col-12 col-md-4">
-          <div class="action-card rounded-4 p-4 text-white d-flex align-items-center gap-3 shadow-sm h-100">
+          <router-link to="/contactos" class="action-card rounded-4 p-4 text-white d-flex align-items-center gap-3 shadow-sm h-100 text-decoration-none">
             <div class="action-icon-wrapper rounded-3">
               <i class="bi bi-people"></i>
             </div>
@@ -147,7 +147,7 @@
               <h3 class="action-title m-0">Ver Afiliados</h3>
               <p class="action-description text-white-50 m-0">Gestionar tus contactos</p>
             </div>
-          </div>
+          </router-link>
         </div>
       </div>
 

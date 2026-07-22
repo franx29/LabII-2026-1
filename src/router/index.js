@@ -7,6 +7,7 @@ import RegisterView from '@/views/RegisterView.vue'
 import RecoverView from '@/views/RecoverView.vue'
 
 // Rutas privadas (banca en línea)
+import ContactsView from '@/views/ContactsView.vue'
 import MovementsView from '@/views/MovementsView.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import TransfersView from '@/views/TransfersView.vue'
@@ -42,6 +43,12 @@ const routes = [
     path: '/inicio',
     name: 'dashboard',
     component: DashboardView,
+    meta: { layout: 'private' },
+  },
+  {
+    path: '/contactos',
+    name: 'contacts',
+    component: ContactsView,
     meta: { layout: 'private' },
   },
   {
@@ -89,4 +96,4 @@ router.beforeEach((to, from, next) => {
 })
 
 
-export default router
+export default router
