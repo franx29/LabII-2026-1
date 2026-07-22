@@ -41,9 +41,28 @@
     </Transition>
 
     <!-- Listado principal -->
-    <div v-if="isLoading" class="loader-container d-flex flex-column justify-content-center align-items-center py-5">
-      <div class="spinner-border text-teal mb-3" role="status"></div>
-      <p class="text-muted">Cargando tus afiliados...</p>
+    <div v-if="isLoading">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 mb-4">
+        <div v-for="i in 8" :key="i" class="col">
+          <div class="card border-0 shadow-sm rounded-4 p-3 h-100 position-relative contact-card">
+            <div class="d-flex flex-column">
+              <!-- Avatar Circular Skeleton -->
+              <div class="skeleton-loader skeleton-circle mb-3" style="width: 44px; height: 44px;"></div>
+
+              <!-- Campos de Información Skeleton -->
+              <div class="info-group mb-2">
+                <div class="skeleton-loader skeleton-text mb-1" style="width: 80px; height: 11px;"></div>
+                <div class="skeleton-loader skeleton-text mb-0" style="width: 140px; height: 18px;"></div>
+              </div>
+
+              <div class="info-group mt-2">
+                <div class="skeleton-loader skeleton-text mb-1" style="width: 100px; height: 11px;"></div>
+                <div class="skeleton-loader skeleton-text mb-0" style="width: 180px; height: 14px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div v-else>

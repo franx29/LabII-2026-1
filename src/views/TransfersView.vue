@@ -6,12 +6,52 @@
       <p class="view-subtitle">Realiza transferencias de forma rápida y segura</p>
     </header>
 
-    <!-- Cargador global de inicio -->
-    <div v-if="isLoadingData" class="loader-container d-flex flex-column justify-content-center align-items-center py-5">
-      <div class="spinner-border text-teal mb-3" role="status">
-        <span class="visually-hidden">Cargando...</span>
+    <!-- Esqueleto de Carga (Skeleton Loader) -->
+    <div v-if="isLoadingData" class="transfers-skeleton">
+      <!-- Tarjeta de Saldo Disponible -->
+      <div class="card border-0 shadow-sm rounded-4 p-3 mb-4" style="background-color: #ffffff; border: 1px solid rgba(8, 95, 99, 0.08) !important;">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div>
+            <div class="skeleton-loader skeleton-text mb-1" style="width: 120px; height: 12px;"></div>
+            <div class="skeleton-loader skeleton-text" style="width: 150px; height: 24px; margin-bottom: 0;"></div>
+          </div>
+          <div class="text-end">
+            <div class="skeleton-loader skeleton-text mb-1 ms-auto" style="width: 120px; height: 12px;"></div>
+            <div class="skeleton-loader skeleton-text" style="width: 180px; height: 20px; margin-bottom: 0;"></div>
+          </div>
+        </div>
       </div>
-      <p class="text-muted">Cargando información de tu cuenta...</p>
+
+      <!-- Panel 1: Datos del Destinatario -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background-color: #ffffff; border: 1px solid rgba(8, 95, 99, 0.08) !important;">
+        <div class="skeleton-loader skeleton-text mb-3" style="width: 180px; height: 20px;"></div>
+        <div class="mb-3">
+          <div class="skeleton-loader skeleton-text mb-2" style="width: 200px; height: 14px;"></div>
+          <div class="skeleton-loader skeleton-text" style="height: 45px; border-radius: 10px; margin-bottom: 0;"></div>
+        </div>
+        <div class="form-check mb-3">
+          <div class="skeleton-loader skeleton-text" style="width: 250px; height: 18px; margin-bottom: 0;"></div>
+        </div>
+      </div>
+
+      <!-- Panel 2: Detalles de la Transferencia -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background-color: #ffffff; border: 1px solid rgba(8, 95, 99, 0.08) !important;">
+        <div class="skeleton-loader skeleton-text mb-3" style="width: 220px; height: 20px;"></div>
+        <div class="mb-3">
+          <div class="skeleton-loader skeleton-text mb-2" style="width: 120px; height: 14px;"></div>
+          <div class="skeleton-loader skeleton-text" style="height: 45px; border-radius: 10px; margin-bottom: 0;"></div>
+        </div>
+        <div class="mb-3">
+          <div class="skeleton-loader skeleton-text mb-2" style="width: 180px; height: 14px;"></div>
+          <div class="skeleton-loader skeleton-text" style="height: 80px; border-radius: 10px; margin-bottom: 0;"></div>
+        </div>
+      </div>
+
+      <!-- Botones de Acción -->
+      <div class="d-flex justify-content-center gap-3 mb-5">
+        <div class="skeleton-loader skeleton-button" style="height: 42px; border-radius: 10px; width: 120px;"></div>
+        <div class="skeleton-loader skeleton-button" style="height: 42px; border-radius: 10px; width: 120px;"></div>
+      </div>
     </div>
 
     <div v-else class="transfers-container">

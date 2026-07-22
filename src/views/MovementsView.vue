@@ -40,12 +40,37 @@
       </button>
     </div>
 
-    <!-- Estado de Carga -->
-    <div v-if="isLoading" class="loader-container d-flex flex-column justify-content-center align-items-center py-5">
-      <div class="spinner-border text-teal mb-3" role="status">
-        <span class="visually-hidden">Cargando...</span>
+    <!-- Esqueleto de Carga (Skeleton Loader) -->
+    <div v-if="isLoading" class="movements-skeleton">
+      <!-- Filtros Skeleton -->
+      <div class="d-flex align-items-center flex-wrap gap-2 mb-4">
+        <div class="skeleton-loader skeleton-text mb-0" style="width: 100px; height: 20px;"></div>
+        <div class="skeleton-loader skeleton-button mb-0" style="width: 70px; height: 35px; border-radius: 20px;"></div>
+        <div class="skeleton-loader skeleton-button mb-0" style="width: 90px; height: 35px; border-radius: 20px;"></div>
+        <div class="skeleton-loader skeleton-button mb-0" style="width: 80px; height: 35px; border-radius: 20px;"></div>
       </div>
-      <p class="text-muted">Obteniendo movimientos...</p>
+
+      <!-- Tabla Skeleton Card -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background-color: #ffffff; border: 1px solid rgba(8, 95, 99, 0.08) !important;">
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead>
+              <tr>
+                <th v-for="i in 3" :key="i" class="border-0">
+                  <div class="skeleton-loader skeleton-text mx-auto" style="width: 60px; height: 14px;"></div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="row in 6" :key="row">
+                <td v-for="col in 3" :key="col" class="py-3 border-light">
+                  <div class="skeleton-loader skeleton-text mx-auto" style="width: 70%; height: 14px; margin-bottom: 0;"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <!-- Tabla de Movimientos -->
